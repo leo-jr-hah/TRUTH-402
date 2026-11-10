@@ -15,7 +15,10 @@ import { useEffect, useRef, useState } from "react";
 
 import { Select } from "@/components/ui/select";
 import { ReportFeeSplit } from "@/components/oracle-panel";
-import { useSuiWallet } from "@/components/wallet-connect";
+import {
+  requestWalletConnect,
+  useSuiWallet,
+} from "@/components/wallet-connect";
 import { paymentAuthorization } from "@/lib/payment-auth";
 import { removeEmDashes } from "@/lib/sanitize";
 import type {
@@ -258,6 +261,10 @@ export function AgentDemo({
 
   async function run(selectedMethod = method) {
     if (running) return;
+    if (live && !wallet.canSign && !digest.trim()) {
+      requestWalletConnect();
+      return;
+    }
     const id = ++runId.current;
     const current = () => alive.current && runId.current === id;
     const path = `/api/oracle/markets/${encodeURIComponent(marketId)}/signal`;
@@ -481,11 +488,9 @@ export function AgentDemo({
               <Play size={16} />
             )}
             {running
-              ? "Running..."
-              : ran && !error
-                ? invoice
-                  ? "Pay and unlock"
-                  : "Pay and unlock"
+              ? "Working..."
+              : live && !wallet.canSign
+                ? "Connect wallet to pay"
                 : "Pay and unlock"}
           </button>
         </div>
@@ -494,43 +499,9 @@ export function AgentDemo({
       {live || invoice?.mode === "live" ? (
         <div className="mt-4 space-y-3">
           <p className="text-ink/70 text-sm">
-            Live Mainnet: your wallet approves the payment, or you supply a
-            confirmed digest for this invoice. Never send the private invoice
-            token on-chain.
+            Your wallet approves a 0.01 USDC payment on Sui. The report unlocks
+            once the transaction is confirmed.
           </p>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              className="button-secondary"
-              aria-pressed={method === "wallet"}
-              disabled={running}
-              onClick={() => setMethod("wallet")}
-            >
-              Connected wallet
-            </button>
-            <button
-              type="button"
-              className="button-secondary"
-              aria-pressed={method === "digest"}
-              disabled={running}
-              onClick={() => setMethod("digest")}
-            >
-              Paste Mainnet digest
-            </button>
-            {sandboxEnabled && (
-              <button
-                type="button"
-                className="button-secondary"
-                disabled={running || !marketId}
-                onClick={() => {
-                  setMethod("sandbox");
-                  void run("sandbox");
-                }}
-              >
-                Request sponsored grant (no funds)
-              </button>
-            )}
-          </div>
           {invoice && (
             <div className="border-line space-y-2 rounded-xl border p-3 text-xs">
               <p className="break-all">Recipient: {invoice.recipient}</p>
@@ -539,17 +510,6 @@ export function AgentDemo({
                 Public PTB reference: {invoice.paymentReference}
               </p>
               <p>Expires {invoice.expiresAt}</p>
-              <label className="block">
-                <span className="field-label">Paste Mainnet Sui Digest</span>
-                <input
-                  className="field font-mono text-xs"
-                  value={digest}
-                  onChange={(event) => setDigest(event.target.value.trim())}
-                  maxLength={100}
-                  autoComplete="off"
-                  spellCheck={false}
-                />
-              </label>
             </div>
           )}
         </div>

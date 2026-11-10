@@ -337,12 +337,6 @@ export function TradeTicket(props: TicketProps) {
           )}
         </div>
 
-        {!walletConnected && (
-          <p className="text-ink/65 text-xs">
-            Wallet required. Use Connect wallet in the top bar.
-          </p>
-        )}
-
         <button
           ref={buyRef}
           type="submit"

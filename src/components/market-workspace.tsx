@@ -32,7 +32,10 @@ import { burst } from "@/components/ui/burst";
 import { CountUp } from "@/components/ui/count-up";
 import { Disclosure } from "@/components/ui/disclosure";
 import { Select } from "@/components/ui/select";
-import { useSuiWallet } from "@/components/wallet-connect";
+import {
+  requestWalletConnect,
+  useSuiWallet,
+} from "@/components/wallet-connect";
 import { formatWalletAddress } from "@/lib/sui-wallet";
 import { formatCredits, formatDateTime, humanize } from "@/lib/format";
 import { computeMemoryCalibratedSignal } from "@/lib/memory/credibility";
@@ -439,7 +442,7 @@ export function MarketWorkspace({
     setTradeMessage(null);
     try {
       if (connected?.kind !== "wallet") {
-        setTradeError("Connect your Sui wallet to trade");
+        requestWalletConnect();
         return;
       }
 

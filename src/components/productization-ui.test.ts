@@ -35,11 +35,13 @@ describe("live product UI without credential misrepresentation", () => {
         sandboxEnabled: true,
       }),
     );
-    expect(html).toContain("Pay and unlock");
+    expect(html).toMatch(/Pay and unlock|Connect wallet to pay/u);
     expect(
       html
         .match(/<button\b[^>]*>[\s\S]*?<\/button>/gu)
-        ?.find((button) => button.includes("Pay and unlock")),
+        ?.find((button) =>
+          /Pay and unlock|Connect wallet to pay/u.test(button),
+        ),
     ).not.toContain('disabled=""');
     expect(html).not.toContain("demo is off");
   });

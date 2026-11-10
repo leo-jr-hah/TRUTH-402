@@ -39,6 +39,11 @@ export function SuiWalletProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+export function requestWalletConnect() {
+  if (typeof window !== "undefined")
+    window.dispatchEvent(new Event("truth402:connect-wallet"));
+}
+
 export function useSuiWallet() {
   const store = useContext(WalletContext);
   const state = useSyncExternalStore(
@@ -131,6 +136,16 @@ export function WalletConnect() {
       setMessage("Enter a valid nonzero Sui address.");
     }
   }
+  useEffect(() => {
+    const openDialog = () => {
+      setMessage(null);
+      setCopied(false);
+      setOpen(true);
+    };
+    window.addEventListener("truth402:connect-wallet", openDialog);
+    return () =>
+      window.removeEventListener("truth402:connect-wallet", openDialog);
+  }, []);
   const enoki = wallets.find((wallet) => /enoki|zklogin/iu.test(wallet.name));
   return (
     <>

@@ -1,11 +1,11 @@
 import "server-only";
 
 import { createHash } from "node:crypto";
-import { JsonRpcHTTPTransport, SuiJsonRpcClient } from "@mysten/sui/jsonRpc";
 import { Transaction } from "@mysten/sui/transactions";
 
 import { getOraclePaymentConfig, getTatumConfig } from "@/lib/config";
 import { AppError } from "@/lib/errors";
+import { tatumGrpcClient } from "@/lib/tatum-grpc";
 import {
   assertOracleStorageSafety,
   bindOracleWalletTransaction,
@@ -16,30 +16,7 @@ import { suiAddressSchema } from "@/lib/validation";
 import type { OracleInvoiceRecord } from "@/types/oracle";
 
 function client() {
-  const config = getTatumConfig();
-  if (config.mode !== "live")
-    throw new AppError(
-      "LIVE_WALLET_DISABLED",
-      "Wallet transfers require live payment mode.",
-      409,
-    );
-  return new SuiJsonRpcClient({
-    network: "mainnet",
-    transport: new JsonRpcHTTPTransport({
-      url: config.rpcUrl,
-      rpc: { headers: { "x-api-key": config.apiKey } },
-      fetch: (url, options) =>
-        fetch(url, {
-          ...options,
-          redirect: "error",
-          cache: "no-store",
-          signal: AbortSignal.any([
-            AbortSignal.timeout(10000),
-            ...(options?.signal ? [options.signal] : []),
-          ]),
-        }),
-    }),
-  });
+  return tatumGrpcClient();
 }
 
 export async function activeWalletInvoice(
@@ -115,26 +92,26 @@ export async function buildWalletPayment(
   let balance = BigInt(0);
   let cursor: string | null | undefined;
   for (let page = 0; page < 10; page++) {
-    const batch = await rpc.getCoins({
+    const batch = await rpc.core.listCoins({
       owner: sender,
       coinType: config.coinType,
       limit: 100,
       cursor,
     });
-    for (const coin of batch.data) {
+    for (const coin of batch.objects) {
       if (BigInt(coin.balance) <= BigInt(0)) continue;
-      coins.push(coin.coinObjectId);
+      coins.push(coin.objectId);
       balance += BigInt(coin.balance);
       if (balance >= BigInt(10000)) break;
     }
     if (balance >= BigInt(10000) || !batch.hasNextPage) break;
-    if (!batch.nextCursor || batch.nextCursor === cursor)
+    if (!batch.cursor || batch.cursor === cursor)
       throw new AppError(
         "COIN_PAGINATION_FAILED",
         "Wallet coin inventory did not advance.",
         502,
       );
-    cursor = batch.nextCursor;
+    cursor = batch.cursor;
   }
   if (balance < BigInt(10000))
     throw new AppError(
@@ -174,13 +151,12 @@ export async function executeWalletPayment(
       422,
     );
   // Tatum submits the already-signed bytes. This service never holds a buyer key.
-  const result = await client().executeTransactionBlock({
-    transactionBlock: bytes,
-    signature,
-    options: { showEffects: true },
-    requestType: "WaitForLocalExecution",
+  const outcome = await client().core.executeTransaction({
+    transaction: bytes,
+    signatures: [signature],
   });
-  if (result.effects?.status.status !== "success")
+  const result = outcome.Transaction;
+  if (!result?.status.success)
     throw new AppError(
       "WALLET_PAYMENT_FAILED",
       "The signed Sui transaction failed. Gas may have been charged; inspect the wallet before retrying.",
@@ -195,10 +171,6 @@ export async function confirmWalletPayment(
   digest: string,
 ) {
   await activeWalletInvoice(marketId, token);
-  await client().waitForTransaction({
-    digest,
-    timeout: 20000,
-    pollInterval: 1000,
-  });
+  await client().core.waitForTransaction({ digest, timeout: 20000 });
   return { digest };
 }

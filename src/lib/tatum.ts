@@ -11,6 +11,7 @@ import {
   SUI_NATIVE_COIN_TYPE,
 } from "@/lib/config";
 import { AppError } from "@/lib/errors";
+import { grpcCall } from "@/lib/tatum-grpc";
 import { removeEmDashes } from "@/lib/sanitize";
 import { createPredictionFixture } from "@/lib/seed";
 import { publicProviderError } from "@/lib/server-secrets";
@@ -81,30 +82,7 @@ async function rpc<T>(
       503,
     );
   try {
-    const response = await fetch(config.rpcUrl, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": config.apiKey,
-      },
-      body: JSON.stringify({ jsonrpc: "2.0", id: "truth402", method, params }),
-      cache: "no-store",
-      redirect: "error",
-      signal: AbortSignal.timeout(10_000),
-    });
-    if (!response.ok)
-      throw new Error(`Tatum returned HTTP ${response.status}.`);
-    const payload = z
-      .object({
-        jsonrpc: z.literal("2.0"),
-        id: z.literal("truth402"),
-        result: z.unknown().optional(),
-        error: z.object({ code: z.number(), message: z.string() }).optional(),
-      })
-      .parse(await response.json());
-    if (payload.error)
-      throw new Error(`Tatum RPC error ${payload.error.code}.`);
-    return schema.parse(payload.result);
+    return schema.parse(await grpcCall(method, params));
   } catch (error) {
     // No provider response body or Zod value is reflected to a client.
     throw new AppError(

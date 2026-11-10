@@ -3,7 +3,6 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { Transaction } from "@mysten/sui/transactions";
-import { SuiJsonRpcClient } from "@mysten/sui/jsonRpc";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { POST } from "@/app/api/oracle/markets/[id]/wallet-payment/route";
@@ -27,6 +26,15 @@ const preview = {
   preCommitCheckpoint: null,
   topProfitVsTrustDivergencePreview: [],
 };
+const grpc = vi.hoisted(() => ({
+  listCoins: vi.fn(),
+  executeTransaction: vi.fn(),
+  waitForTransaction: vi.fn(),
+}));
+vi.mock("@/lib/tatum-grpc", () => ({
+  tatumGrpcClient: () => ({ core: grpc }),
+  grpcCall: vi.fn(),
+}));
 describe("buyer-funded native USDC invoice PTBs", () => {
   let directory: string;
   beforeEach(async () => {
@@ -86,22 +94,19 @@ describe("buyer-funded native USDC invoice PTBs", () => {
   });
   it("builds from the buyer's native-USDC coins, stores only a bytes hash, and executes only those exact signed bytes", async () => {
     const bill = await invoice();
-    const getCoins = vi
-      .spyOn(SuiJsonRpcClient.prototype, "getCoins")
-      .mockResolvedValue({
-        data: [
-          {
-            coinType: SUI_USDC_COIN_TYPE,
-            coinObjectId: `0x${"1".repeat(64)}`,
-            version: "1",
-            digest: "A".repeat(44),
-            balance: "10000",
-            previousTransaction: "A".repeat(44),
-          },
-        ],
-        hasNextPage: false,
-        nextCursor: null,
-      });
+    const getCoins = grpc.listCoins.mockResolvedValue({
+      objects: [
+        {
+          type: SUI_USDC_COIN_TYPE,
+          objectId: `0x${"1".repeat(64)}`,
+          version: "1",
+          digest: "A".repeat(44),
+          balance: "10000",
+        },
+      ],
+      hasNextPage: false,
+      cursor: null,
+    });
     vi.spyOn(Transaction.prototype, "build").mockResolvedValue(
       new Uint8Array([1, 2, 3]),
     );
@@ -121,12 +126,9 @@ describe("buyer-funded native USDC invoice PTBs", () => {
         .update(new Uint8Array([1, 2, 3]))
         .digest("hex"),
     });
-    const execute = vi
-      .spyOn(SuiJsonRpcClient.prototype, "executeTransactionBlock")
-      .mockResolvedValue({
-        digest: "A".repeat(44),
-        effects: { status: { status: "success" } },
-      } as Awaited<ReturnType<SuiJsonRpcClient["executeTransactionBlock"]>>);
+    const execute = grpc.executeTransaction.mockResolvedValue({
+      Transaction: { digest: "A".repeat(44), status: { success: true } },
+    });
     await expect(
       executeWalletPayment(marketId, bill.invoiceToken, "AAAA", "BBBB"),
     ).rejects.toMatchObject({ code: "WALLET_TRANSACTION_MISMATCH" });
@@ -143,9 +145,9 @@ describe("buyer-funded native USDC invoice PTBs", () => {
   });
   it("fails safely for missing funds, expired invoices and cross-origin submissions", async () => {
     const bill = await invoice();
-    vi.spyOn(SuiJsonRpcClient.prototype, "getCoins").mockResolvedValue({
-      data: [],
-      nextCursor: null,
+    grpc.listCoins.mockResolvedValue({
+      objects: [],
+      cursor: null,
       hasNextPage: false,
     });
     await expect(
