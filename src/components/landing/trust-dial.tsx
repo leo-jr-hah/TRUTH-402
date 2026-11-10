@@ -46,7 +46,6 @@ export function TrustDial({
 
   const [tx, ty] = pt(crowd, R + 22);
   const [rx, ry] = pt(record, R + 22);
-  const [cx2, cy2] = pt(crowd, R - 34);
   const lo = Math.min(crowd, record);
   const hi = Math.max(crowd, record);
 
@@ -95,24 +94,7 @@ export function TrustDial({
           })}
           <g>
             <circle cx={tx} cy={ty} r="5" fill="var(--ink)" />
-            <text
-              x={cx2}
-              y={cy2 + 4}
-              textAnchor="middle"
-              className="fill-ink text-[11px] font-semibold"
-            >
-              crowd
-            </text>
             <circle cx={rx} cy={ry} r="5" fill="var(--teal)" />
-            <text
-              x={rx}
-              y={ry - 12}
-              textAnchor="middle"
-              className="text-[11px] font-semibold"
-              fill="var(--accent-text)"
-            >
-              track record
-            </text>
           </g>
           <motion.line
             x1={CX}
