@@ -52,6 +52,7 @@ export interface TicketProps {
   displayName: string;
   onName: (name: string) => void;
   commitMode: "demo" | "live";
+  walletConnected?: boolean;
   operatorRequired?: boolean;
   operatorToken: string;
   onToken: (value: string) => void;
@@ -73,6 +74,7 @@ export function TradeTicket(props: TicketProps) {
     displayName,
     onName,
     commitMode,
+    walletConnected = true,
     operatorRequired = commitMode === "live",
     operatorToken,
     onToken,
@@ -335,6 +337,12 @@ export function TradeTicket(props: TicketProps) {
           )}
         </div>
 
+        {!walletConnected && (
+          <p className="text-ink/65 text-xs">
+            Wallet required. Use Connect wallet in the top bar.
+          </p>
+        )}
+
         <button
           ref={buyRef}
           type="submit"
@@ -350,7 +358,9 @@ export function TradeTicket(props: TicketProps) {
               transition={{ duration: 0.16 }}
               className="inline-flex max-w-full min-w-0 items-center justify-center gap-2"
             >
-              {pending ? (
+              {!walletConnected ? (
+                <span className="truncate">Connect wallet to trade</span>
+              ) : pending ? (
                 <>
                   <LoaderCircle size={17} className="animate-spin" /> Buying
                 </>

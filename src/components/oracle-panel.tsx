@@ -863,6 +863,38 @@ export function OraclePanel({
           </AnimatePresence>
         </div>
 
+        {report?.paymentReceipt?.digest && (
+          <div className="border-line bg-panel text-ink mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border px-3 py-2 text-xs">
+            <span className="text-teal inline-flex items-center gap-1.5 font-semibold">
+              <Receipt size={13} aria-hidden />
+              Payment confirmed
+            </span>
+            <a
+              href={`https://suiscan.xyz/mainnet/tx/${report.paymentReceipt.digest}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={report.paymentReceipt.digest}
+              className="text-teal hover:text-ink inline-flex items-center gap-1 font-mono whitespace-nowrap underline underline-offset-2"
+            >
+              {report.paymentReceipt.digest.slice(0, 8)}…
+              {report.paymentReceipt.digest.slice(-6)}
+              <ExternalLink size={12} aria-hidden />
+            </a>
+            {report.paymentReceipt.recipient && (
+              <span className="text-ink/70 inline-flex items-center gap-1">
+                Recipient
+                <code
+                  title={report.paymentReceipt.recipient}
+                  className="text-ink font-mono"
+                >
+                  {report.paymentReceipt.recipient.slice(0, 6)}…
+                  {report.paymentReceipt.recipient.slice(-4)}
+                </code>
+              </span>
+            )}
+          </div>
+        )}
+
         {report && (
           <ReportFeeSplit incentiveEconomics={report.incentiveEconomics} />
         )}

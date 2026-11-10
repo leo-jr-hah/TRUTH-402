@@ -71,6 +71,39 @@ function blankSteps(path: string): Step[] {
 }
 
 const pct = (n: number) => Math.round(n * 100);
+const shortId = (value: string) =>
+  value.length > 18 ? `${value.slice(0, 8)}...${value.slice(-6)}` : value;
+
+function walrusIdFromReport(value: unknown, nested = false): string {
+  if (!value || typeof value !== "object") return "";
+  const record = value as Record<string, unknown>;
+  for (const key of [
+    "walrusMemoryId",
+    "walrusBlobId",
+    "walrusRecordId",
+    "walrusId",
+    "memoryId",
+    "memoryRecordId",
+    "blobId",
+    "recordId",
+    ...(nested ? ["id"] : []),
+  ]) {
+    const id = record[key];
+    if (typeof id === "string" && id.trim()) return id.trim();
+  }
+  for (const key of [
+    "walrus",
+    "walrusMemory",
+    "walrusRecord",
+    "memory",
+    "memoryRecord",
+    ...(nested ? ["blob", "record"] : []),
+  ]) {
+    const id = walrusIdFromReport(record[key], true);
+    if (id) return id;
+  }
+  return "";
+}
 
 function StepIcon({ status }: { status: Status }) {
   const cls = "grid size-7 shrink-0 place-items-center rounded-full border";
@@ -200,9 +233,11 @@ export function AgentDemo({
   const [error, setError] = useState<string | null>(null);
   const [invoice, setInvoice] = useState<OracleInvoice | null>(null);
   const [digest, setDigest] = useState("");
+  const [confirmedDigest, setConfirmedDigest] = useState("");
   const [report, setReport] = useState<
     OracleUnlockedPayload | OracleSandboxPayload | null
   >(null);
+  const walrusId = walrusIdFromReport(report);
   const [method, setMethod] = useState<"wallet" | "digest" | "sandbox">(
     "wallet",
   );
@@ -359,6 +394,7 @@ export function AgentDemo({
       if (current()) {
         setOutcomes(payload.memoryCalibratedProbabilities);
         setReport(payload);
+        setConfirmedDigest(paymentDigest ?? "");
         setInvoice(null);
         setDigest("");
       }
@@ -579,6 +615,34 @@ export function AgentDemo({
       {outcomes && (
         <div className="mt-6">
           <ReportView outcomes={outcomes} />
+          {report && (confirmedDigest || walrusId) && (
+            <dl className="border-line bg-panel mt-3 space-y-1.5 rounded-lg border px-3 py-2 text-xs">
+              {confirmedDigest && (
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                  <dt className="text-ink/70 font-medium">Payment confirmed</dt>
+                  <dd className="min-w-0">
+                    <a
+                      href={`https://suiscan.xyz/mainnet/tx/${encodeURIComponent(confirmedDigest)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={confirmedDigest}
+                      className="text-teal hover:text-ink focus-visible:outline-teal rounded-sm font-mono underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                      {shortId(confirmedDigest)}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {walrusId && (
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                  <dt className="text-ink/70 font-medium">Stored on Walrus</dt>
+                  <dd className="text-ink font-mono" title={walrusId}>
+                    {shortId(walrusId)}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          )}
           {report && "sandbox" in report && (
             <p className="mt-3 text-sm">
               Sponsored grant, not a payment. {report.sandbox.provider}{" "}

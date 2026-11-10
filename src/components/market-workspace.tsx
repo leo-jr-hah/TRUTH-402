@@ -438,6 +438,11 @@ export function MarketWorkspace({
     setTradeError(null);
     setTradeMessage(null);
     try {
+      if (connected?.kind !== "wallet") {
+        setTradeError("Connect your Sui wallet to trade");
+        return;
+      }
+
       const response = await fetch(`/api/markets/${market.id}/trade`, {
         method: "POST",
         headers: {
@@ -450,9 +455,7 @@ export function MarketWorkspace({
           outcomeId: selectedOutcome,
           amount,
           displayName: displayName.trim(),
-          ...(connected?.kind === "wallet"
-            ? { participantId: connected.address }
-            : {}),
+          participantId: connected.address,
           role: "trader",
         }),
       });
@@ -467,7 +470,7 @@ export function MarketWorkspace({
         (o) => o.id === selectedOutcome,
       );
       setTradeMessage(
-        `Bought ${removeEmDashes(chosen?.label ?? "the outcome")} for ${formatCredits(amount)} credits. It is now at ${pct0(chosen?.price ?? 0)}.`,
+        `Bought ${removeEmDashes(chosen?.label ?? "the outcome")} for $${formatCredits(amount)}. It is now at ${pct0(chosen?.price ?? 0)}.`,
       );
       setRecorded(true);
       window.setTimeout(() => setRecorded(false), 2200);
@@ -568,6 +571,7 @@ export function MarketWorkspace({
 
   const ticketProps = {
     market,
+    walletConnected: connected?.kind === "wallet",
     selectedOutcome,
     onSelect: (id: string) => {
       setSelectedOutcome(id);
