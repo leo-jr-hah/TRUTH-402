@@ -24,7 +24,7 @@ import type {
 export const DEFAULT_MEMORY_QUERY =
   "TRUTH402 market resolution participant performance credibility decision signal";
 
-const CREDIBILITY_CACHE_TTL_MS = 15_000;
+const CREDIBILITY_CACHE_TTL_MS = 120_000;
 const MAX_CORPUS_RECORDS = 500;
 const CACHE_SYMBOL = Symbol.for("truth402.insights-cache");
 
@@ -96,6 +96,9 @@ async function getCorpus(): Promise<DerivedCorpus> {
   if (cache.corpus?.key === key && cache.corpus.expiresAt > Date.now()) {
     return cache.corpus;
   }
+  // Stale-while-revalidate: show the last good result at once and refresh in
+  // the background, so a slow Walrus recall never blocks a page load.
+  const stale = cache.corpus?.key === key ? cache.corpus : undefined;
 
   if (
     !cache.inFlight ||
@@ -122,6 +125,10 @@ async function getCorpus(): Promise<DerivedCorpus> {
   const inFlight = cache.inFlight;
   if (!inFlight) {
     throw new Error("Insights corpus cache failed to start.");
+  }
+  if (stale) {
+    inFlight.catch(() => undefined);
+    return stale;
   }
   return inFlight;
 }
