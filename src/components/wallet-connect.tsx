@@ -123,10 +123,11 @@ export function WalletConnect() {
     const opener = trigger.current;
     node?.showModal();
     return () => {
+      store?.cancelPending();
       node?.close();
       opener?.focus();
     };
-  }, [open]);
+  }, [open, store]);
   function watch(value: string) {
     try {
       store?.watch(value);
@@ -280,23 +281,20 @@ export function WalletConnect() {
                 Nightly, or a Sui-enabled Phantom wallet, then return here.
               </p>
             )}
-            <button
-              type="button"
-              className="button-primary w-full"
-              disabled={busy}
-              onClick={async () => {
-                if (enoki) {
+            {enoki && (
+              <button
+                type="button"
+                className="button-primary w-full"
+                disabled={busy}
+                onClick={async () => {
                   await store?.connect(enoki);
                   if (store?.getSnapshot().connected?.kind === "wallet")
                     setOpen(false);
-                } else
-                  setMessage(
-                    "Enoki requires an app API key, OAuth sign-in, and a registered Enoki wallet provider. None is configured here. Use watch-only access below without claiming ownership.",
-                  );
-              }}
-            >
-              Connect Walrus Enoki zkLogin Wallet
-            </button>
+                }}
+              >
+                Sign in with zkLogin
+              </button>
+            )}
           </div>
           <form
             className="border-line mt-4 space-y-2 border-t pt-4"

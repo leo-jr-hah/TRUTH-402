@@ -202,6 +202,12 @@ export class SuiWalletStore {
     this.update({ connected, canSign, busy: false, error: null });
     this.persist(connected);
   }
+  /** Abandon a pending connection so the wallet list is usable again. */
+  cancelPending() {
+    if (!this.state.busy) return;
+    this.generation += 1;
+    this.update({ busy: false, error: null });
+  }
   async connect(wallet: SuiStandardWallet, silent = false) {
     this.clear();
     const generation = this.generation;
@@ -209,9 +215,15 @@ export class SuiWalletStore {
     try {
       if (!standardWallet(wallet))
         throw new Error("Choose a Sui Mainnet Wallet Standard wallet.");
-      const result = await wallet.features["standard:connect"].connect({
-        silent,
-      });
+      const result = await Promise.race([
+        wallet.features["standard:connect"].connect({ silent }),
+        new Promise<never>((_, reject) =>
+          setTimeout(
+            () => reject(new Error("Wallet did not respond.")),
+            silent ? 5_000 : 45_000,
+          ),
+        ),
+      ]);
       if (generation !== this.generation) return;
       const account = mainnetAccount(result.accounts);
       if (!account)
