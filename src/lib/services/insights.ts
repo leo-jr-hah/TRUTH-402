@@ -17,22 +17,22 @@ import type {
   Credibility,
   LearningMetrics,
   RecalledMemory,
-  VerdictoMemoryRecord,
+  TRUTH402MemoryRecord,
   InsightsSnapshot,
 } from "@/types/domain";
 
 export const DEFAULT_MEMORY_QUERY =
-  "Verdicto market resolution participant performance credibility decision signal";
+  "TRUTH402 market resolution participant performance credibility decision signal";
 
 const CREDIBILITY_CACHE_TTL_MS = 15_000;
 const MAX_CORPUS_RECORDS = 500;
-const CACHE_SYMBOL = Symbol.for("verdicto.insights-cache");
+const CACHE_SYMBOL = Symbol.for("truth402.insights-cache");
 
 interface DerivedCorpus {
   key: string;
   expiresAt: number;
   memories: RecalledMemory[];
-  records: VerdictoMemoryRecord[];
+  records: TRUTH402MemoryRecord[];
   leaderboard: Credibility[];
   calibration: InsightsSnapshot["calibration"];
   recencyWeighted: InsightsSnapshot["recencyWeighted"];

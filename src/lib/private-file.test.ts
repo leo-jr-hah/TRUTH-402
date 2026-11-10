@@ -16,7 +16,7 @@ import { writePrivateFileAtomic } from "@/lib/private-file";
 
 describe("private atomic file writes", () => {
   it("creates and replaces files as 0600 without leftover temporaries", async () => {
-    const directory = await mkdtemp(path.join(tmpdir(), "verdicto-private-"));
+    const directory = await mkdtemp(path.join(tmpdir(), "truth402-private-"));
     const file = path.join(directory, "state.json");
     try {
       await writePrivateFileAtomic(file, "first");
@@ -32,7 +32,7 @@ describe("private atomic file writes", () => {
   });
 
   it("removes its temporary file when the atomic rename fails", async () => {
-    const directory = await mkdtemp(path.join(tmpdir(), "verdicto-cleanup-"));
+    const directory = await mkdtemp(path.join(tmpdir(), "truth402-cleanup-"));
     const target = path.join(directory, "occupied");
     try {
       await mkdir(target);

@@ -240,7 +240,7 @@ export async function redeemOraclePayment(
 
 export function authorizeOracleCommit(request: Request): void {
   if (!requiresOperator()) return;
-  const secret = process.env.VERDICTO_ORACLE_ADMIN_TOKEN;
+  const secret = process.env.TRUTH402_ORACLE_ADMIN_TOKEN;
   if (!secret || secret.length < 32)
     throw new AppError(
       "ORACLE_ADMIN_NOT_CONFIGURED",
@@ -273,7 +273,7 @@ export function oracleManifest() {
       tatumMode: modes.tatumMode,
       aiMode: modes.aiMode,
       storageMode: storageMode(),
-      mainnetWrites: process.env.VERDICTO_ENABLE_MAINNET_WRITES === "true",
+      mainnetWrites: process.env.TRUTH402_ENABLE_MAINNET_WRITES === "true",
     },
     compatibility: {
       profile: "custom-sui-digest-v1",
@@ -295,7 +295,7 @@ export function oracleManifest() {
       credentialParameters: ["digest", "invoice", "method", "id", "network"],
       invoiceHeader: "x-payment-invoice",
       liveBinding:
-        process.env.VERDICTO_REQUIRE_STRICT_PTB_BINDING === "false"
+        process.env.TRUTH402_REQUIRE_STRICT_PTB_BINDING === "false"
           ? "Secret invoice token, settlement within issuedAt minus 60 seconds to expiresAt, single-use digest; PTB reference preferred"
           : "Secret invoice token plus its SHA-256 reference in a pure string PTB input",
       replayPolicy:
@@ -323,7 +323,7 @@ export function oracleManifest() {
     },
     openapi: {
       openapi: "3.1.0",
-      info: { title: "Verdicto TRUTH-402 Oracle", version: "1.0.0" },
+      info: { title: "TRUTH402 TRUTH-402 Oracle", version: "1.0.0" },
       paths: {
         "/api/oracle/markets/{id}/signal": {
           get: {

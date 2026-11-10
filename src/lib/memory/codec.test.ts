@@ -12,7 +12,7 @@ import {
 import { createSeedDatabase } from "@/lib/seed";
 import type { Market, Trade } from "@/types/domain";
 
-describe("Verdicto memory codec", () => {
+describe("TRUTH402 memory codec", () => {
   const database = createSeedDatabase();
   const resolved = database.markets.filter(
     (market) => market.status === "resolved",

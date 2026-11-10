@@ -19,8 +19,8 @@ describe("durable single-use oracle receipts", () => {
   beforeEach(async () => {
     directory = await mkdtemp(path.join(tmpdir(), "truth402-ledger-"));
     await clearStoreCacheForTests();
-    vi.stubEnv("VERDICTO_STORAGE_MODE", "file");
-    vi.stubEnv("VERDICTO_DATA_FILE", path.join(directory, "state.json"));
+    vi.stubEnv("TRUTH402_STORAGE_MODE", "file");
+    vi.stubEnv("TRUTH402_DATA_FILE", path.join(directory, "state.json"));
     vi.stubEnv("VERCEL", "");
     await resetStoreForTests();
   });

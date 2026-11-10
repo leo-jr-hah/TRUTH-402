@@ -442,7 +442,7 @@ describe("HTTP 402 oracle and immutable pre-event snapshots", () => {
   });
 
   it("fails closed for live ephemeral storage and requires constant-time operator authorization", async () => {
-    vi.stubEnv("VERDICTO_TATUM_MODE", "live");
+    vi.stubEnv("TRUTH402_TATUM_MODE", "live");
     vi.stubEnv("SUI_ORACLE_ADDRESS", `0x${"a".repeat(64)}`);
     await expect(commitOracleForecast(marketId)).rejects.toMatchObject({
       code: "ORACLE_DURABLE_STORAGE_REQUIRED",
@@ -455,7 +455,7 @@ describe("HTTP 402 oracle and immutable pre-event snapshots", () => {
         topProfitVsTrustDivergencePreview: [],
       }),
     ).rejects.toMatchObject({ code: "ORACLE_DURABLE_STORAGE_REQUIRED" });
-    vi.stubEnv("VERDICTO_ORACLE_ADMIN_TOKEN", "a".repeat(32));
+    vi.stubEnv("TRUTH402_ORACLE_ADMIN_TOKEN", "a".repeat(32));
     expect(() =>
       authorizeOracleCommit(request({ authorization: "a".repeat(32) })),
     ).toThrow();
@@ -473,15 +473,15 @@ describe("HTTP 402 oracle and immutable pre-event snapshots", () => {
   });
 
   it("verifies a live invoice-bound transfer using only mocked RPC and isolated temporary storage", async () => {
-    temporary = await mkdtemp(path.join(tmpdir(), "verdicto-oracle-"));
+    temporary = await mkdtemp(path.join(tmpdir(), "truth402-oracle-"));
     const recipient = `0x${"a".repeat(64)}`;
-    vi.stubEnv("VERDICTO_TATUM_MODE", "live");
+    vi.stubEnv("TRUTH402_TATUM_MODE", "live");
     vi.stubEnv("SUI_ORACLE_ADDRESS", recipient);
     vi.stubEnv("TATUM_API_KEY", "test-tatum-key");
     vi.stubEnv("TATUM_SUI_RPC_URL", "https://sui-mainnet.gateway.tatum.io");
-    vi.stubEnv("VERDICTO_STORAGE_MODE", "file");
-    vi.stubEnv("VERDICTO_DATA_FILE", path.join(temporary, "state.json"));
-    vi.stubEnv("VERDICTO_ORACLE_SINGLE_INSTANCE", "true");
+    vi.stubEnv("TRUTH402_STORAGE_MODE", "file");
+    vi.stubEnv("TRUTH402_DATA_FILE", path.join(temporary, "state.json"));
+    vi.stubEnv("TRUTH402_ORACLE_SINGLE_INSTANCE", "true");
     vi.stubEnv("VERCEL", "");
     const invoice = (await (
       await createPaymentChallenge(marketId, {
@@ -498,7 +498,7 @@ describe("HTTP 402 oracle and immutable pre-event snapshots", () => {
     fetchMock.mockImplementation(async () =>
       Response.json({
         jsonrpc: "2.0",
-        id: "verdicto",
+        id: "truth402",
         result: {
           digest,
           checkpoint: "1",

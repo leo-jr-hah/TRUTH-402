@@ -35,12 +35,11 @@ describe("live product UI without credential misrepresentation", () => {
         sandboxEnabled: true,
       }),
     );
-    expect(html).toContain("Run the agent");
-    expect(html).toContain("Run sponsored sandbox (no funds)");
+    expect(html).toContain("Pay and unlock");
     expect(
       html
         .match(/<button\b[^>]*>[\s\S]*?<\/button>/gu)
-        ?.find((button) => button.includes("Run the agent")),
+        ?.find((button) => button.includes("Pay and unlock")),
     ).not.toContain('disabled=""');
     expect(html).not.toContain("demo is off");
   });

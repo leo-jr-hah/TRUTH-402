@@ -24,7 +24,7 @@ function BodyPortal({ children }: { children: React.ReactNode }) {
   return ready ? createPortal(children, document.body) : null;
 }
 
-export const CHIPS = [10, 25, 50, 100];
+export const CHIPS = [5, 25, 100, 500];
 export const MIN_AMOUNT = 1;
 export const MAX_AMOUNT = 10000;
 
@@ -38,8 +38,8 @@ export function amountProblem(text: string): string | null {
   if (!text.trim()) return "Enter an amount.";
   const n = parseAmount(text);
   if (!Number.isFinite(n)) return "Use numbers only, like 50.";
-  if (n < MIN_AMOUNT) return "The smallest trade is 1 credit.";
-  if (n > MAX_AMOUNT) return "The largest trade is 10,000 credits.";
+  if (n < MIN_AMOUNT) return "The smallest trade is $1.";
+  if (n > MAX_AMOUNT) return "The largest trade is $10,000.";
   return null;
 }
 
@@ -181,7 +181,7 @@ export function TradeTicket(props: TicketProps) {
             htmlFor={`${uid}-amount`}
             className="text-ink/75 mb-1.5 block text-xs font-semibold"
           >
-            Amount in credits
+            Amount ($)
           </label>
           <div className="relative">
             <input
@@ -189,7 +189,7 @@ export function TradeTicket(props: TicketProps) {
               type="text"
               inputMode="decimal"
               autoComplete="off"
-              className={`num border-line text-ink focus-visible:outline-teal h-11 w-full min-w-0 rounded-lg border pr-10 pl-3 text-base font-semibold outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 lg:h-10 ${
+              className={`num border-line text-ink focus-visible:outline-teal h-11 w-full min-w-0 rounded-lg border pr-3 pl-7 text-base font-semibold outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 lg:h-10 ${
                 problem ? "bg-ice/40" : "bg-ground"
               }`}
               value={amountText}
@@ -197,8 +197,8 @@ export function TradeTicket(props: TicketProps) {
               aria-invalid={Boolean(problem)}
               aria-describedby={problem ? `${uid}-amount-err` : undefined}
             />
-            <span className="text-ink/60 pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs">
-              cr
+            <span className="text-ink/60 pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-xs">
+              $
             </span>
           </div>
           {problem && (
@@ -224,7 +224,7 @@ export function TradeTicket(props: TicketProps) {
                 onClick={() => onAmount(String(value))}
                 aria-pressed={!problem && amount === value}
               >
-                {value}
+                ${value}
               </motion.button>
             ))}
           </div>
@@ -320,7 +320,7 @@ export function TradeTicket(props: TicketProps) {
                 <dd className="num min-w-0 truncate font-semibold">
                   <LiveNum
                     value={impact.shares}
-                    format={(n) => `${formatCredits(n)} cr`}
+                    format={(n) => `$${formatCredits(n)}`}
                     flash={false}
                   />
                 </dd>
@@ -364,7 +364,7 @@ export function TradeTicket(props: TicketProps) {
                   {!problem && (
                     <span className="num shrink-0 font-normal opacity-80">
                       {" "}
-                      for {formatCredits(amount)} cr
+                      for ${formatCredits(amount)}
                     </span>
                   )}
                 </>

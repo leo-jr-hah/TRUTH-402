@@ -24,7 +24,7 @@ import { TraderDetail } from "@/components/trader-detail";
 import { Disclosure } from "@/components/ui/disclosure";
 import { formatDate, formatDateTime, humanize } from "@/lib/format";
 import { removeEmDashes } from "@/lib/sanitize";
-import type { InsightsSnapshot, VerdictoMemoryRecord } from "@/types/domain";
+import type { InsightsSnapshot, TRUTH402MemoryRecord } from "@/types/domain";
 import type { PredictionCalibrationSnapshot } from "@/types/oracle";
 
 type SortKey = "skill" | "profit";
@@ -48,7 +48,7 @@ const RESULT_PAGE = 5;
 
 function recordById(
   snapshot: InsightsSnapshot,
-): Map<string, VerdictoMemoryRecord> {
+): Map<string, TRUTH402MemoryRecord> {
   return new Map(snapshot.records.map((record) => [record.recordId, record]));
 }
 

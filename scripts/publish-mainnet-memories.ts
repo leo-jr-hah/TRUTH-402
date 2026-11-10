@@ -73,7 +73,7 @@ async function main(): Promise<void> {
     return record;
   });
 
-  console.log(`Prepared ${records.length} distinct Verdicto learning records.`);
+  console.log(`Prepared ${records.length} distinct TRUTH402 learning records.`);
   console.log(
     records
       .map(
@@ -91,9 +91,9 @@ async function main(): Promise<void> {
     return;
   }
 
-  if (process.env.VERDICTO_ENABLE_MAINNET_WRITES !== "true") {
+  if (process.env.TRUTH402_ENABLE_MAINNET_WRITES !== "true") {
     throw new Error(
-      "Refusing to publish: set VERDICTO_ENABLE_MAINNET_WRITES=true as an explicit safety acknowledgement.",
+      "Refusing to publish: set TRUTH402_ENABLE_MAINNET_WRITES=true as an explicit safety acknowledgement.",
     );
   }
 
@@ -199,7 +199,7 @@ void main().catch((error: unknown) => {
     "MEMWAL_PRIVATE_KEY",
     "TATUM_API_KEY",
     "AGENT_ROUTER_API_KEY",
-    "VERDICTO_ORACLE_ADMIN_TOKEN",
+    "TRUTH402_ORACLE_ADMIN_TOKEN",
   ]) {
     const secret = process.env[name];
     if (secret) message = message.replaceAll(secret, "[redacted]");

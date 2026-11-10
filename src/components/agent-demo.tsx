@@ -194,6 +194,7 @@ export function AgentDemo({
   sandboxEnabled?: boolean;
 }) {
   const [marketId, setMarketId] = useState(markets[0]?.id ?? "");
+  const [plan, setPlan] = useState<"single" | "pack" | "day">("single");
   const [steps, setSteps] = useState<Step[]>([]);
   const [outcomes, setOutcomes] = useState<Outcome[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -284,7 +285,7 @@ export function AgentDemo({
         activeInvoice.sandboxAvailable;
       if (useSandbox) {
         patch(1, {
-          request: "Public sponsored sandbox grant",
+          request: "Public sponsored grant",
           response: "No funds move. This is not payment settlement.",
         });
       } else if (activeInvoice.mode === "demo" && !live) {
@@ -310,9 +311,9 @@ export function AgentDemo({
       patch(1, {
         status: "done",
         response: useSandbox
-          ? "Sandbox grant requested; payment verification is not bypassed."
+          ? "Sponsored grant requested; payment verification is not bypassed."
           : activeInvoice.mode === "demo"
-            ? "Local settlement credential ready. No funds move."
+            ? "Settlement credential ready. No funds move."
             : `Submitted ${paymentDigest!.slice(0, 20)}... awaiting server verification.`,
       });
 
@@ -399,27 +400,59 @@ export function AgentDemo({
             disabled={running}
           />
         </div>
-        <button
-          type="button"
-          className="button-primary sm:shrink-0"
-          disabled={running || !marketId}
-          onClick={() => void run()}
-        >
-          {running ? (
-            <LoaderCircle size={16} className="animate-spin" />
-          ) : ran && !error ? (
-            <RotateCcw size={16} />
-          ) : (
-            <Play size={16} />
-          )}
-          {running
-            ? "Running..."
-            : ran && !error
-              ? invoice
-                ? "Continue with payment"
-                : "Run again"
-              : "Run the agent"}
-        </button>
+        <div className="flex min-w-0 flex-col gap-2 sm:shrink-0">
+          <div
+            role="group"
+            aria-label="Report plan"
+            className="grid grid-cols-3 gap-1.5"
+          >
+            {(
+              [
+                { value: "single", label: "Single report", price: "0.01 USDC" },
+                { value: "pack", label: "10 reports", price: "0.05 USDC" },
+                { value: "day", label: "Daily pass", price: "0.25 USDC" },
+              ] as const
+            ).map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                aria-pressed={plan === option.value}
+                onClick={() => setPlan(option.value)}
+                className={`text-ink focus-visible:outline-teal rounded-lg border px-2 py-1.5 text-left text-xs leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                  plan === option.value
+                    ? "bg-ice border-teal"
+                    : "bg-panel border-line hover:border-teal"
+                }`}
+              >
+                <span className="block font-semibold">{option.label}</span>
+                <span className="num text-ink/70 mt-0.5 block">
+                  {option.price}
+                </span>
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="button-primary sm:shrink-0"
+            disabled={running || !marketId}
+            onClick={() => void run()}
+          >
+            {running ? (
+              <LoaderCircle size={16} className="animate-spin" />
+            ) : ran && !error ? (
+              <RotateCcw size={16} />
+            ) : (
+              <Play size={16} />
+            )}
+            {running
+              ? "Running..."
+              : ran && !error
+                ? invoice
+                  ? "Pay and unlock"
+                  : "Pay and unlock"
+                : "Pay and unlock"}
+          </button>
+        </div>
       </div>
 
       {live || invoice?.mode === "live" ? (
@@ -458,7 +491,7 @@ export function AgentDemo({
                   void run("sandbox");
                 }}
               >
-                Run sponsored sandbox (no funds)
+                Request sponsored grant (no funds)
               </button>
             )}
           </div>
@@ -486,7 +519,7 @@ export function AgentDemo({
         </div>
       ) : (
         <p className="text-ink/70 mt-4 text-sm">
-          Real requests to this app. Local sandbox credit; no funds move.
+          Real requests to this app. Credit only; no funds move.
         </p>
       )}
 
@@ -548,7 +581,7 @@ export function AgentDemo({
           <ReportView outcomes={outcomes} />
           {report && "sandbox" in report && (
             <p className="mt-3 text-sm">
-              Sponsored sandbox, not a payment. {report.sandbox.provider}{" "}
+              Sponsored grant, not a payment. {report.sandbox.provider}{" "}
               checkpoint {report.sandbox.checkpoint}, {report.sandbox.latencyMs}{" "}
               ms. No revenue recorded.
             </p>

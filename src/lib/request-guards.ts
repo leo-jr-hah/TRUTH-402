@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 
 import { AppError } from "@/lib/errors";
 
-const RATE_LIMIT_SYMBOL = Symbol.for("verdicto.rate-limit");
+const RATE_LIMIT_SYMBOL = Symbol.for("truth402.rate-limit");
 const MAX_RATE_LIMIT_BUCKETS = 10_000;
 
 interface RateLimitBucket {

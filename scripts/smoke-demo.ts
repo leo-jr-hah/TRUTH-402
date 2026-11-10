@@ -282,10 +282,10 @@ async function main(): Promise<void> {
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
       type: "simple",
-      title: "Which launch narrative should Verdicto test first?",
+      title: "Which launch narrative should TRUTH402 test first?",
       description:
         "The demo council will select one launch narrative after collecting an explicit conviction signal.",
-      sponsor: "Verdicto Demo Council",
+      sponsor: "TRUTH402 Demo Council",
       outcomes: [
         {
           label: "Decisions that learn",
@@ -388,7 +388,7 @@ async function main(): Promise<void> {
   console.log("  resolution conflict: rejected with 409");
 
   const insights = await json<InsightsSnapshot>(
-    "/api/insights?query=Verdicto%20participant%20performance%20credibility%20market%20resolution&limit=100",
+    "/api/insights?query=TRUTH402%20participant%20performance%20credibility%20market%20resolution&limit=100",
   );
   assert.equal(insights.status, 200);
   assert.equal(insights.body.provider, "demo");

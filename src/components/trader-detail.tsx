@@ -12,13 +12,13 @@ import { removeEmDashes } from "@/lib/sanitize";
 import type {
   Credibility,
   ParticipantPerformanceMemory,
-  VerdictoMemoryRecord,
+  TRUTH402MemoryRecord,
 } from "@/types/domain";
 
 const DAY = 86_400_000;
 
 function callsFor(
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
   participantId: string,
 ): ParticipantPerformanceMemory[] {
   return records
@@ -93,7 +93,7 @@ export function TraderDetail({
   onClose,
 }: {
   entry: Credibility;
-  records: VerdictoMemoryRecord[];
+  records: TRUTH402MemoryRecord[];
   halfLifeDays: number;
   variant: "dock" | "sheet";
   onClose: () => void;

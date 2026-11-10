@@ -2,13 +2,13 @@
 
 **Profit rank is luck. Memory rank is skill.**
 
-A memory-calibrated prediction oracle and custom Sui HTTP-402 alpha exchange, evolved from Verdicto for the **Markets & Sports Prediction** track of the Tatum × Walrus Total Recall hackathon. The headline is a product thesis, not a statistical guarantee: both luck and skill contribute to profit, and learned rankings can be wrong.
+A memory-calibrated prediction oracle and custom Sui HTTP-402 alpha exchange, evolved from TRUTH402 for the **Markets & Sports Prediction** track of the Tatum × Walrus Total Recall hackathon. The headline is a product thesis, not a statistical guarantee: both luck and skill contribute to profit, and learned rankings can be wrong.
 
 ## What works
 
 - Fixed-prior shrinkage of realized per-share edge, with transparent profit-versus-trust ranks, sample counts, Beta accuracy intervals, and a conviction-concentration calibration chart.
 - A neutral/cobalt, responsive interface: interactive rank comparison, category-filtered signals, dual probability bars, LMSR impact previews, and an embedded payment terminal.
-- **22 deterministic demo markets and 62 learning records**. Sports, crypto, macro, and governance scenarios are explicitly synthetic. The original 20 Verdicto records retain their exact bytes and IDs.
+- **22 deterministic demo markets and 62 learning records**. Sports, crypto, macro, and governance scenarios are explicitly synthetic. The original 20 TRUTH402 records retain their exact bytes and IDs.
 - A separate six-wallet benchmark: Lucky Whale nets $142,000 from a $0.06 longshot win and a second loss, ranking profit #1 but trust #6. Maya ranks trust #1 across 42 observations, with +18.4 percentage points mean edge. The figures are computed, not hard-coded rankings. This benchmark is not Walrus evidence.
 - Walrus Memory `@mysten-incubation/memwal@0.1.9` write/recall adapters, granular resolution receipts, and content-bound pre-resolution snapshots with browser SHA-256 verification.
 - Explicit wallet-backfill baseline metadata and post-resolution before/after skill/rank transitions tied to the prior evidence record IDs.
@@ -28,11 +28,11 @@ Node.js **22.12+**, npm 10+. No wallet or API keys are needed for the demo.
 ```bash
 cd /Users/leo/Documents/WALRUS/walrus
 npm ci
-export VERDICTO_MEMORY_MODE=demo
-export VERDICTO_TATUM_MODE=demo
-export VERDICTO_AI_MODE=demo
-export VERDICTO_STORAGE_MODE=memory
-export VERDICTO_ENABLE_MAINNET_WRITES=false
+export TRUTH402_MEMORY_MODE=demo
+export TRUTH402_TATUM_MODE=demo
+export TRUTH402_AI_MODE=demo
+export TRUTH402_STORAGE_MODE=memory
+export TRUTH402_ENABLE_MAINNET_WRITES=false
 export NEXT_TELEMETRY_DISABLED=1
 NODE_OPTIONS="--import=/Users/leo/Documents/WALRUS/walrus/scripts/demo-network-guard.mjs" \
 npm run dev -- --hostname 127.0.0.1 --port 3000
@@ -40,7 +40,7 @@ npm run dev -- --hostname 127.0.0.1 --port 3000
 
 Open <http://127.0.0.1:3000>. The homepage comparison and sports terminal are the fastest demo path. In-memory state resets on server restart. Persistent `file` mode now heals old stores on first load: missing seeded markets are appended by `market.id`, and missing demo memories by `blobId`, with one private atomic write. **Existing markets, trades, resolutions, memory text, invoices, commitments and receipts are never replaced.** The original five-market store becomes 22 markets / 62 learning records without a reset. An unchanged store is not rewritten, and malformed files fail closed. Stop the old server before starting a new single-instance process.
 
-Configuration names retain the `VERDICTO_` prefix for compatibility. New installations default to namespace `truth402`; **keep an existing `MEMWAL_NAMESPACE=verdicto` if that is where your records were published**. Changing a namespace is not a migration. See `/Users/leo/Documents/WALRUS/walrus/.env.example` for all settings.
+Configuration names retain the `TRUTH402_` prefix for compatibility. New installations default to namespace `truth402`; **keep an existing `MEMWAL_NAMESPACE=truth402` if that is where your records were published**. Changing a namespace is not a migration. See `/Users/leo/Documents/WALRUS/walrus/.env.example` for all settings.
 
 ## Verification
 
@@ -103,14 +103,14 @@ Verification checks successful effects, checkpoint inclusion, exact native coin 
 
 Live payment prerequisites:
 
-- `VERDICTO_TATUM_MODE=live`, Tatum key, explicit non-demo `SUI_ORACLE_ADDRESS`;
-- `VERDICTO_STORAGE_MODE=file` on a durable private volume;
-- `VERDICTO_ORACLE_SINGLE_INSTANCE=true`, exactly one process, no serverless payment workers;
+- `TRUTH402_TATUM_MODE=live`, Tatum key, explicit non-demo `SUI_ORACLE_ADDRESS`;
+- `TRUTH402_STORAGE_MODE=file` on a durable private volume;
+- `TRUTH402_ORACLE_SINGLE_INSTANCE=true`, exactly one process, no serverless payment workers;
 - HTTPS, authenticated/trusted operator access and edge-level abuse controls.
 
 Live forecast commitments also require durable single-instance storage so a restart cannot forget an official pick.
 
-Any live provider enables operator authorization for market mutations, commits, comparison/revenue reads and AI generation by default. Set `VERDICTO_ORACLE_ADMIN_TOKEN` to at least 32 random characters. `VERDICTO_PUBLIC_JUDGE_MODE=true` explicitly opens those routes and removes UI password prompts; use a separate judging deployment with edge quotas and a dedicated evidence namespace. `VERDICTO_REQUIRE_OPERATOR_TOKEN=true` overrides public judging and forces authentication. Walrus writes still require `VERDICTO_ENABLE_MAINNET_WRITES=true` and valid Mainnet delegate credentials; public mode never bypasses that lock or durable payment storage.
+Any live provider enables operator authorization for market mutations, commits, comparison/revenue reads and AI generation by default. Set `TRUTH402_ORACLE_ADMIN_TOKEN` to at least 32 random characters. `TRUTH402_PUBLIC_JUDGE_MODE=true` explicitly opens those routes and removes UI password prompts; use a separate judging deployment with edge quotas and a dedicated evidence namespace. `TRUTH402_REQUIRE_OPERATOR_TOKEN=true` overrides public judging and forces authentication. Walrus writes still require `TRUTH402_ENABLE_MAINNET_WRITES=true` and valid Mainnet delegate credentials; public mode never bypasses that lock or durable payment storage.
 
 ### Wallets, judge sandbox and Mainnet readiness
 
@@ -118,7 +118,7 @@ The header discovers Sui Wallet Standard providers (including a genuinely regist
 
 The live browser runner stays enabled. It can prepare an invoice for a connected signing wallet or accept a digest for that invoice. With public judge mode enabled it also offers **Instant sponsored sandbox access**: a separate POST endpoint checks the configured Tatum checkpoint and returns `paymentReceipt: null`, `paymentVerified: false`, and `fundsMoved: false`. This is a public report grant, not a sponsored USDC transfer. It consumes the grant invoice but never creates payment revenue or royalty accrual. Sending a sponsored header to the paid endpoint never makes a fake digest valid.
 
-`VERDICTO_REQUIRE_STRICT_PTB_BINDING=false` explicitly enables weaker settlement-time binding in `[issuedAt - 60 seconds, expiresAt]`; strict reference binding remains the default. This compatibility mode cannot establish payer ownership and must not be used where transaction appropriation is unacceptable. `SUI_ALLOW_ANY_COIN_FALLBACK=true` accepts only native SUI of at least 1,000,000 MIST as a separately labeled alternative, not arbitrary coins or USDC-equivalent revenue.
+`TRUTH402_REQUIRE_STRICT_PTB_BINDING=false` explicitly enables weaker settlement-time binding in `[issuedAt - 60 seconds, expiresAt]`; strict reference binding remains the default. This compatibility mode cannot establish payer ownership and must not be used where transaction appropriation is unacceptable. `SUI_ALLOW_ANY_COIN_FALLBACK=true` accepts only native SUI of at least 1,000,000 MIST as a separately labeled alternative, not arbitrary coins or USDC-equivalent revenue.
 
 ```bash
 cd /Users/leo/Documents/WALRUS/walrus
@@ -139,11 +139,11 @@ The buyer is a client, not a server launcher. Use **two terminals**. The tempora
 
 ```bash
 cd /Users/leo/Documents/WALRUS/walrus
-VERDICTO_MEMORY_MODE=demo \
-VERDICTO_TATUM_MODE=demo \
-VERDICTO_AI_MODE=demo \
-VERDICTO_STORAGE_MODE=memory \
-VERDICTO_ENABLE_MAINNET_WRITES=false \
+TRUTH402_MEMORY_MODE=demo \
+TRUTH402_TATUM_MODE=demo \
+TRUTH402_AI_MODE=demo \
+TRUTH402_STORAGE_MODE=memory \
+TRUTH402_ENABLE_MAINNET_WRITES=false \
 NEXT_TELEMETRY_DISABLED=1 \
 NODE_OPTIONS="--import=/Users/leo/Documents/WALRUS/walrus/scripts/demo-network-guard.mjs" \
 npm run dev -- --hostname 127.0.0.1 --port 3000

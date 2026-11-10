@@ -25,7 +25,7 @@ import type {
   MarketSignalMemory,
   ParticipantPerformanceMemory,
   Trade,
-  VerdictoMemoryRecord,
+  TRUTH402MemoryRecord,
 } from "@/types/domain";
 
 const DATA_MARKER = "VERDICTO_DATA_V1:";
@@ -281,7 +281,7 @@ const oracleForecastSchema = memoryBase
   })
   .passthrough();
 
-export const verdictoMemorySchema = z.discriminatedUnion("kind", [
+export const truth402MemorySchema = z.discriminatedUnion("kind", [
   resolutionMemorySchema,
   signalMemorySchema,
   performanceMemorySchema,
@@ -353,9 +353,9 @@ export function deriveEntryEvidence(
 
 /** Enrich scoring copies only. Never rewrite historical provider payloads. */
 export function enrichPerformanceRecords(
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
   markets: Market[],
-): VerdictoMemoryRecord[] {
+): TRUTH402MemoryRecord[] {
   const byId = new Map(markets.map((market) => [market.id, market]));
   return records.map((record) => {
     if (
@@ -420,7 +420,7 @@ function strongestConviction(
 
 export function buildResolutionMemories(
   market: Market,
-): VerdictoMemoryRecord[] {
+): TRUTH402MemoryRecord[] {
   if (
     market.status !== "resolved" ||
     !market.winningOutcomeId ||
@@ -463,7 +463,7 @@ export function buildResolutionMemories(
       : {}),
   };
 
-  const resolution: VerdictoMemoryRecord = {
+  const resolution: TRUTH402MemoryRecord = {
     ...base,
     recordId: createMemoryRecordId({
       version: MEMORY_SCHEMA_VERSION,
@@ -561,7 +561,7 @@ export function buildResolutionMemories(
   return [resolution, signal, ...performance];
 }
 
-export function serializeMemory(record: VerdictoMemoryRecord): string {
+export function serializeMemory(record: TRUTH402MemoryRecord): string {
   assertCanonicalMemoryRecordId(record);
   const label = record.kind
     .split("_")
@@ -576,7 +576,7 @@ export function serializeMemory(record: VerdictoMemoryRecord): string {
   ].join("\n");
 }
 
-export function parseMemory(text: string): VerdictoMemoryRecord | null {
+export function parseMemory(text: string): TRUTH402MemoryRecord | null {
   const framedMarker = `\n${DATA_MARKER}`;
   const markerIndex = text.lastIndexOf(framedMarker);
   const payloadStart =
@@ -589,9 +589,9 @@ export function parseMemory(text: string): VerdictoMemoryRecord | null {
 
   try {
     const payload = text.slice(payloadStart).trim();
-    return verdictoMemorySchema.parse(
+    return truth402MemorySchema.parse(
       JSON.parse(payload),
-    ) as VerdictoMemoryRecord;
+    ) as TRUTH402MemoryRecord;
   } catch {
     return null;
   }

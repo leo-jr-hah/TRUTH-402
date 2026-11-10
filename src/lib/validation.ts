@@ -153,7 +153,7 @@ export const predictionWalletSchema = z
 export const insightsQuerySchema = z
   .object({
     query: userText(3, 300).default(
-      "Verdicto market resolution participant performance credibility decision signal",
+      "TRUTH402 market resolution participant performance credibility decision signal",
     ),
     limit: z.coerce.number().int().min(1).max(100).default(50),
   })

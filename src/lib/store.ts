@@ -6,7 +6,7 @@ import path from "node:path";
 import { AppError } from "@/lib/errors";
 import { SUI_NATIVE_COIN_TYPE, SUI_USDC_COIN_TYPE } from "@/lib/config";
 import { writePrivateFileAtomic } from "@/lib/private-file";
-import { createSeedDatabase, type VerdictoDatabase } from "@/lib/seed";
+import { createSeedDatabase, type TRUTH402Database } from "@/lib/seed";
 import type { Market, RecalledMemory } from "@/types/domain";
 import type {
   OracleCommitment,
@@ -14,11 +14,11 @@ import type {
   OraclePaymentRecord,
 } from "@/types/oracle";
 
-const STORE_SYMBOL = Symbol.for("verdicto.store");
+const STORE_SYMBOL = Symbol.for("truth402.store");
 
 interface StoreState {
-  database?: VerdictoDatabase;
-  loading?: Promise<VerdictoDatabase>;
+  database?: TRUTH402Database;
+  loading?: Promise<TRUTH402Database>;
   queue: Promise<void>;
 }
 
@@ -35,15 +35,15 @@ export function storageMode(): "file" | "memory" {
   // to process memory there so missing durable storage cannot break the demo.
   // Local file mode is single-instance only: its lock is process-local.
   if (process.env.VERCEL) return "memory";
-  const configured = process.env.VERDICTO_STORAGE_MODE;
+  const configured = process.env.TRUTH402_STORAGE_MODE;
   if (configured === "file" || configured === "memory") return configured;
   return "file";
 }
 
 function dataFile(): string {
   return (
-    process.env.VERDICTO_DATA_FILE ||
-    path.join(process.cwd(), ".data", "verdicto.json")
+    process.env.TRUTH402_DATA_FILE ||
+    path.join(process.cwd(), ".data", "truth402.json")
   );
 }
 
@@ -51,7 +51,7 @@ function clone<T>(value: T): T {
   return structuredClone(value);
 }
 
-async function load(): Promise<VerdictoDatabase> {
+async function load(): Promise<TRUTH402Database> {
   // The process cache means the O(S) JSON parse happens once per process, not on
   // every request. S is the serialized store size. Mutations currently rewrite
   // O(S), appropriate only for the documented single-instance demo store.
@@ -66,19 +66,19 @@ async function load(): Promise<VerdictoDatabase> {
   return state.loading;
 }
 
-async function initialize(): Promise<VerdictoDatabase> {
+async function initialize(): Promise<TRUTH402Database> {
   if (storageMode() === "memory") {
     state.database = createSeedDatabase();
     return state.database;
   }
 
-  let database: VerdictoDatabase;
+  let database: TRUTH402Database;
   let changed = false;
   try {
     // Runtime demo state is created after deployment and must not be traced as
     // a build input. Vercel uses memory mode; local file mode supplies the path.
     const raw = await readFile(/* turbopackIgnore: true */ dataFile(), "utf8");
-    const parsed = JSON.parse(raw) as VerdictoDatabase;
+    const parsed = JSON.parse(raw) as TRUTH402Database;
     if (
       parsed.version !== 1 ||
       !Array.isArray(parsed.markets) ||
@@ -92,7 +92,7 @@ async function initialize(): Promise<VerdictoDatabase> {
     if (code !== "ENOENT") {
       throw new AppError(
         "STORE_READ_FAILED",
-        "Verdicto could not read its local data store.",
+        "TRUTH402 could not read its local data store.",
         500,
       );
     }
@@ -120,7 +120,7 @@ async function initialize(): Promise<VerdictoDatabase> {
     } catch {
       throw new AppError(
         "STORE_WRITE_FAILED",
-        "Verdicto could not persist its seed upgrade. The existing store was not replaced.",
+        "TRUTH402 could not persist its seed upgrade. The existing store was not replaced.",
         503,
       );
     }
@@ -130,14 +130,14 @@ async function initialize(): Promise<VerdictoDatabase> {
   return state.database;
 }
 
-async function persist(database: VerdictoDatabase): Promise<void> {
+async function persist(database: TRUTH402Database): Promise<void> {
   if (storageMode() === "memory") return;
   const file = dataFile();
   await writePrivateFileAtomic(file, `${JSON.stringify(database, null, 2)}\n`);
 }
 
 async function exclusive<T>(
-  operation: (database: VerdictoDatabase) => Promise<T> | T,
+  operation: (database: TRUTH402Database) => Promise<T> | T,
 ): Promise<T> {
   const previous = state.queue;
   let release!: () => void;
@@ -154,7 +154,7 @@ async function exclusive<T>(
     } catch {
       throw new AppError(
         "STORE_WRITE_FAILED",
-        "Verdicto could not persist its local data store. No state change was accepted.",
+        "TRUTH402 could not persist its local data store. No state change was accepted.",
         503,
       );
     }
@@ -165,7 +165,7 @@ async function exclusive<T>(
   }
 }
 
-export async function readDatabase(): Promise<VerdictoDatabase> {
+export async function readDatabase(): Promise<TRUTH402Database> {
   await state.queue;
   return clone(await load());
 }
@@ -286,11 +286,11 @@ export function assertOracleStorageSafety(mode: "demo" | "live"): void {
   if (
     mode === "live" &&
     (storageMode() !== "file" ||
-      process.env.VERDICTO_ORACLE_SINGLE_INSTANCE !== "true")
+      process.env.TRUTH402_ORACLE_SINGLE_INSTANCE !== "true")
   ) {
     throw new AppError(
       "ORACLE_DURABLE_STORAGE_REQUIRED",
-      "Live payments require durable file storage and VERDICTO_ORACLE_SINGLE_INSTANCE=true. Serverless payments are disabled.",
+      "Live payments require durable file storage and TRUTH402_ORACLE_SINGLE_INSTANCE=true. Serverless payments are disabled.",
       503,
     );
   }

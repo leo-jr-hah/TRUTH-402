@@ -6,7 +6,7 @@ const SECRET_ENV_NAMES = [
   "MEMWAL_PRIVATE_KEY",
   "TATUM_API_KEY",
   "AGENT_ROUTER_API_KEY",
-  "VERDICTO_ORACLE_ADMIN_TOKEN",
+  "TRUTH402_ORACLE_ADMIN_TOKEN",
 ] as const;
 
 /** Return a short provider-safe message that cannot echo configured secrets. */

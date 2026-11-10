@@ -5,7 +5,7 @@ import type {
   Credibility,
   Market,
   MemoryCalibratedProbability,
-  VerdictoMemoryRecord,
+  TRUTH402MemoryRecord,
 } from "@/types/domain";
 import type { OracleIncentiveEconomics, OracleSnapshot } from "@/types/oracle";
 
@@ -122,7 +122,7 @@ export function computeIncentiveEconomics(
   market: Pick<Market, "trades">,
   probabilities: MemoryCalibratedProbability[],
   trustedBackers: Credibility[],
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
   evidence: OracleSnapshot["walrusEvidenceBlobs"] = [],
 ): OracleIncentiveEconomics {
   const metrics = informationMetrics(probabilities);

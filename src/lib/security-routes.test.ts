@@ -14,9 +14,9 @@ describe("live evidence mutation authorization", () => {
   });
   afterEach(() => vi.unstubAllEnvs());
   it("protects every legacy mutation when any provider is live, without contacting providers", async () => {
-    vi.stubEnv("VERDICTO_AI_MODE", "live");
+    vi.stubEnv("TRUTH402_AI_MODE", "live");
     vi.stubEnv(
-      "VERDICTO_ORACLE_ADMIN_TOKEN",
+      "TRUTH402_ORACLE_ADMIN_TOKEN",
       "test-operator-token-with-at-least-32-characters",
     );
     const context = { params: Promise.resolve({ id: "mkt-sports-final" }) };

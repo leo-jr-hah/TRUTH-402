@@ -14,8 +14,8 @@ describe("public live-mode signal previews", () => {
     insights.invalidateInsightsCache();
     const snapshot = await insights.getInsightsSnapshot();
     vi.spyOn(insights, "getInsightsSnapshot").mockResolvedValue(snapshot);
-    vi.stubEnv("VERDICTO_MEMORY_MODE", "live");
-    vi.stubEnv("VERDICTO_TATUM_MODE", "live");
+    vi.stubEnv("TRUTH402_MEMORY_MODE", "live");
+    vi.stubEnv("TRUTH402_TATUM_MODE", "live");
   });
   afterEach(() => {
     vi.restoreAllMocks();
@@ -36,7 +36,7 @@ describe("public live-mode signal previews", () => {
     expect(html).toContain("Alpha Shift");
   });
   it("supplies evidence-complete trust weights and removes prompts only in explicit judge mode", async () => {
-    vi.stubEnv("VERDICTO_PUBLIC_JUDGE_MODE", "true");
+    vi.stubEnv("TRUTH402_PUBLIC_JUDGE_MODE", "true");
     const html = renderToStaticMarkup(
       await MarketPage({ params: Promise.resolve({ id: "mkt-sports-final" }) }),
     );

@@ -2,7 +2,7 @@
 
 A profitable trade is an observation. It is not a complete account of forecasting skill.
 
-That distinction motivated TRUTH-402, our evolution of Verdicto for the Tatum × Walrus Total Recall hackathon. Rather than making another retail betting interface, we built a memory-calibrated oracle: resolved evidence changes trust, trust changes the next estimate, and an AI agent can request the resulting report through a custom Sui HTTP-402 payment flow.
+That distinction motivated TRUTH-402, our evolution of TRUTH402 for the Tatum × Walrus Total Recall hackathon. Rather than making another retail betting interface, we built a memory-calibrated oracle: resolved evidence changes trust, trust changes the next estimate, and an AI agent can request the resulting report through a custom Sui HTTP-402 payment flow.
 
 ## Price is not a private belief
 
@@ -26,7 +26,7 @@ A memory layer is useful only if recalling it changes a decision.
 
 When a simulated market resolves, the application writes a resolution record, a closing-signal record and a performance record per participant. Walrus recall supplies the evidence for future skill estimates. A participant's current backing is weighted by positive shrinkage skill and logarithmic position size; the oracle shifts away from raw market odds toward that cohort's directional conviction.
 
-The interface can show exactly which record and blob IDs supported the adjustment. The original 20 Verdicto records remain byte-for-byte intact. New sports, crypto, macro and governance scenarios are additive, bringing demo state to 62 learning records across 22 markets. A first-load store upgrade appends missing seed IDs without replacing any existing market, memory, payment or commitment. Existing provider files are never reset to make the demonstration look better.
+The interface can show exactly which record and blob IDs supported the adjustment. The original 20 TRUTH402 records remain byte-for-byte intact. New sports, crypto, macro and governance scenarios are additive, bringing demo state to 62 learning records across 22 markets. A first-load store upgrade appends missing seed IDs without replacing any existing market, memory, payment or commitment. Existing provider files are never reset to make the demonstration look better.
 
 Synthetic leaderboard examples remain separate from the actual recalled corpus. Imported Tatum comparison rows are likewise not silently laundered into local memory evidence.
 

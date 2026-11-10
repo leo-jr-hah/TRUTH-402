@@ -48,7 +48,7 @@ import type {
   PreCommitmentProof,
 } from "@/types/oracle";
 
-const COMMIT_FLIGHTS = Symbol.for("verdicto.oracle-commit-flights");
+const COMMIT_FLIGHTS = Symbol.for("truth402.oracle-commit-flights");
 const globalFlights = globalThis as typeof globalThis & {
   [COMMIT_FLIGHTS]?: Map<string, Promise<OracleCommitment>>;
 };

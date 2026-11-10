@@ -13,14 +13,14 @@ import type {
   IntegrationCheck,
   MemoryReceipt,
   RecalledMemory,
-  VerdictoMemoryRecord,
+  TRUTH402MemoryRecord,
 } from "@/types/domain";
 
 class FlakyDemoProvider implements MemoryProvider {
   readonly mode = "demo" as const;
   readonly attempts = new Map<string, number>();
 
-  async remember(record: VerdictoMemoryRecord): Promise<MemoryReceipt> {
+  async remember(record: TRUTH402MemoryRecord): Promise<MemoryReceipt> {
     const attempt = (this.attempts.get(record.recordId) ?? 0) + 1;
     this.attempts.set(record.recordId, attempt);
     if (record.kind !== "market_resolution" && attempt === 1) {

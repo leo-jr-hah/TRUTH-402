@@ -87,7 +87,7 @@ async function rpc<T>(
         "content-type": "application/json",
         "x-api-key": config.apiKey,
       },
-      body: JSON.stringify({ jsonrpc: "2.0", id: "verdicto", method, params }),
+      body: JSON.stringify({ jsonrpc: "2.0", id: "truth402", method, params }),
       cache: "no-store",
       redirect: "error",
       signal: AbortSignal.timeout(10_000),
@@ -97,7 +97,7 @@ async function rpc<T>(
     const payload = z
       .object({
         jsonrpc: z.literal("2.0"),
-        id: z.literal("verdicto"),
+        id: z.literal("truth402"),
         result: z.unknown().optional(),
         error: z.object({ code: z.number(), message: z.string() }).optional(),
       })
@@ -401,7 +401,7 @@ export async function verifySuiPaymentDigest(
       return pure.success;
     });
     const paidAt = Number(tx.timestampMs);
-    const strict = process.env.VERDICTO_REQUIRE_STRICT_PTB_BINDING !== "false";
+    const strict = process.env.TRUTH402_REQUIRE_STRICT_PTB_BINDING !== "false";
     const issuedAt = Date.parse(binding.issuedAt);
     const expiresAt = Date.parse(binding.expiresAt);
     if (

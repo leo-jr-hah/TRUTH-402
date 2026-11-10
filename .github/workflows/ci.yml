@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      VERDICTO_MEMORY_MODE: demo
-      VERDICTO_TATUM_MODE: demo
-      VERDICTO_AI_MODE: demo
-      VERDICTO_STORAGE_MODE: memory
-      VERDICTO_ENABLE_MAINNET_WRITES: "false"
+      TRUTH402_MEMORY_MODE: demo
+      TRUTH402_TATUM_MODE: demo
+      TRUTH402_AI_MODE: demo
+      TRUTH402_STORAGE_MODE: memory
+      TRUTH402_ENABLE_MAINNET_WRITES: "false"
       NEXT_TELEMETRY_DISABLED: "1"
 
     steps:

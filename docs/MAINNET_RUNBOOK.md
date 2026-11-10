@@ -21,7 +21,7 @@ Do not commit these values or paste them into issue trackers, videos, screenshot
 
 ### Tatum
 
-Create a Mainnet API key in <https://dashboard.tatum.io/chains/sui>. Verdicto uses:
+Create a Mainnet API key in <https://dashboard.tatum.io/chains/sui>. TRUTH402 uses:
 
 - endpoint `https://sui-mainnet.gateway.tatum.io`;
 - header `x-api-key`;
@@ -41,36 +41,36 @@ chmod 600 .env.local
 The following are the canonical environment names used by code, `.env.example`, and this runbook. Do not introduce aliases:
 
 ```dotenv
-VERDICTO_MEMORY_MODE=live
-VERDICTO_TATUM_MODE=live
-VERDICTO_AI_MODE=demo
-VERDICTO_STORAGE_MODE=file
+TRUTH402_MEMORY_MODE=live
+TRUTH402_TATUM_MODE=live
+TRUTH402_AI_MODE=demo
+TRUTH402_STORAGE_MODE=file
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 MEMWAL_PRIVATE_KEY=<delegate-private-key>
 MEMWAL_ACCOUNT_ID=<account-object-id>
 MEMWAL_SERVER_URL=https://relayer.memory.walrus.xyz
 MEMWAL_NAMESPACE=truth402
-# Keep verdicto instead if that namespace contains your existing records.
-VERDICTO_ENABLE_MAINNET_WRITES=false
+# Keep truth402 instead if that namespace contains your existing records.
+TRUTH402_ENABLE_MAINNET_WRITES=false
 
 TATUM_API_KEY=<mainnet-api-key>
 TATUM_SUI_RPC_URL=https://sui-mainnet.gateway.tatum.io
 TATUM_DATA_API_URL=https://api.tatum.io/v4/data/prediction
 SUI_ORACLE_ADDRESS=<your-64-hex-Sui-recipient>
-VERDICTO_ORACLE_SINGLE_INSTANCE=true
-VERDICTO_ORACLE_ADMIN_TOKEN=<at-least-32-random-characters>
+TRUTH402_ORACLE_SINGLE_INSTANCE=true
+TRUTH402_ORACLE_ADMIN_TOKEN=<at-least-32-random-characters>
 
-# Required only with VERDICTO_AI_MODE=live
+# Required only with TRUTH402_AI_MODE=live
 AGENT_ROUTER_API_KEY=
 AGENT_ROUTER_BASE_URL=http://127.0.0.1:8318/v1
 AGENT_ROUTER_MODEL=
 
 # Optional local-only absolute path; Vercel always uses process memory
-# VERDICTO_DATA_FILE=/absolute/path/to/verdicto.json
+# TRUTH402_DATA_FILE=/absolute/path/to/truth402.json
 ```
 
-Leave `VERDICTO_ENABLE_MAINNET_WRITES=false` initially. With live memory mode and writes locked, recall/health can run but any application write is rejected with `MAINNET_WRITES_LOCKED`.
+Leave `TRUTH402_ENABLE_MAINNET_WRITES=false` initially. With live memory mode and writes locked, recall/health can run but any application write is rejected with `MAINNET_WRITES_LOCKED`.
 
 Only `NEXT_PUBLIC_APP_URL` is client-visible, and it is metadata - not a credential. Every key remains server-only.
 
@@ -113,7 +113,7 @@ The Tatum check consumes RPC credits but does not mutate chain state.
 Only after review:
 
 ```bash
-export VERDICTO_ENABLE_MAINNET_WRITES=true
+export TRUTH402_ENABLE_MAINNET_WRITES=true
 npm run memories:publish -- --execute
 ```
 
@@ -149,7 +149,7 @@ Keep private manifests out of Git. For submission evidence, expose only what the
 
 ## 7. Promote the deployed app
 
-In the hosting dashboard, configure the same secrets and provider modes. Set `VERDICTO_ENABLE_MAINNET_WRITES=true` only if the deployed sponsor-resolution flow should publish. If the demo should be read-only after seeding, leave it false and use existing Mainnet memories for recall.
+In the hosting dashboard, configure the same secrets and provider modes. Set `TRUTH402_ENABLE_MAINNET_WRITES=true` only if the deployed sponsor-resolution flow should publish. If the demo should be read-only after seeding, leave it false and use existing Mainnet memories for recall.
 
 Visit `/integrations` after deployment. A green page does not by itself prove the ≥10 requirement; retain the inventory result.
 
@@ -174,7 +174,7 @@ The application records each receipt separately and retries only missing target-
 
 ### Tatum error
 
-Confirm the API key is Mainnet-enabled and the endpoint is exact. Verdicto does not fall back to another public RPC because sponsor usage must remain auditable.
+Confirm the API key is Mainnet-enabled and the endpoint is exact. TRUTH402 does not fall back to another public RPC because sponsor usage must remain auditable.
 
 ## 9. Key hygiene after submission
 
@@ -185,7 +185,7 @@ Confirm the API key is Mainnet-enabled and the endpoint is exact. Verdicto does 
 
 ## 10. Live payment deployment
 
-Use HTTPS, exactly one Node process, a durable private file volume, `VERDICTO_STORAGE_MODE=file`, `VERDICTO_ORACLE_SINGLE_INSTANCE=true`, and an explicit non-demo Sui recipient. Vercel/serverless live redemption is intentionally disabled. Protect operator tokens and retain a current ledger; never restore stale digests after charging.
+Use HTTPS, exactly one Node process, a durable private file volume, `TRUTH402_STORAGE_MODE=file`, `TRUTH402_ORACLE_SINGLE_INSTANCE=true`, and an explicit non-demo Sui recipient. Vercel/serverless live redemption is intentionally disabled. Protect operator tokens and retain a current ledger; never restore stale digests after charging.
 
 A payment client must include the invoice public reference as a pure string PTB input and keep its private token off-chain. Retry with the digest and private token within five minutes. The browser now builds a buyer-funded 0.01-native-USDC PTB and requests Wallet Standard signing. Tatum submits the exact signed bytes for sign-only wallets; no server-held buyer key is used. The CLI retains its externally signed digest flow. An ordinary transfer or generic x402/MPP client may not support this custom profile. Do not claim payment interoperability until separately verified.
 
@@ -193,7 +193,7 @@ A payment client must include the invoice public reference as a pure string PTB 
 
 Run `npm run preflight:mainnet` from `/Users/leo/Documents/WALRUS/walrus` after configuring the environment. It loads `.env.local` and `.env` with `@next/env`, redacts credentials, and checks four independent readiness areas. Walrus inventory is fully paginated; a stalled cursor, resync or incomplete inventory cannot be reported as an exact count. The receipt check requires Mainnet metadata, matching account and namespace, confirmed publication timestamps, and IDs present in both manifests and the current namespace inventory. It prints at most ten IDs. Nonzero exit means readiness is missing, failed or incomplete, not that publishing was attempted.
 
-For a dedicated judge deployment, set `VERDICTO_PUBLIC_JUDGE_MODE=true`. This removes operator prompts and opens protected actions to all visitors. Set `VERDICTO_REQUIRE_OPERATOR_TOKEN=true` to force auth regardless. Keep provider quotas, a separate corpus and deployment-level limits. Public mode cannot unlock Mainnet writes or ephemeral payment storage.
+For a dedicated judge deployment, set `TRUTH402_PUBLIC_JUDGE_MODE=true`. This removes operator prompts and opens protected actions to all visitors. Set `TRUTH402_REQUIRE_OPERATOR_TOKEN=true` to force auth regardless. Keep provider quotas, a separate corpus and deployment-level limits. Public mode cannot unlock Mainnet writes or ephemeral payment storage.
 
 Judge sandbox access is a separate no-funds report grant with a checkpoint observation, not a Mainnet payment. There is no funded sponsored relayer configured by default. The hardcoded Walrus watch address is not an authenticated Enoki session. Real Enoki access requires OAuth and a registered wallet provider; the connector never fabricates it.
 

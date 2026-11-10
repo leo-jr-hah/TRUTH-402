@@ -26,16 +26,16 @@ function canonicalUrl(value: string): string {
 
 export function getPublicRuntimeConfig() {
   return {
-    memoryMode: providerMode(process.env.VERDICTO_MEMORY_MODE),
-    tatumMode: providerMode(process.env.VERDICTO_TATUM_MODE),
-    aiMode: providerMode(process.env.VERDICTO_AI_MODE),
+    memoryMode: providerMode(process.env.TRUTH402_MEMORY_MODE),
+    tatumMode: providerMode(process.env.TRUTH402_TATUM_MODE),
+    aiMode: providerMode(process.env.TRUTH402_AI_MODE),
     memoryNamespace: process.env.MEMWAL_NAMESPACE?.trim() || MEMORY_NAMESPACE,
   } as const;
 }
 
 export function requiresOperator(): boolean {
-  if (process.env.VERDICTO_REQUIRE_OPERATOR_TOKEN === "true") return true;
-  if (process.env.VERDICTO_PUBLIC_JUDGE_MODE === "true") return false;
+  if (process.env.TRUTH402_REQUIRE_OPERATOR_TOKEN === "true") return true;
+  if (process.env.TRUTH402_PUBLIC_JUDGE_MODE === "true") return false;
   const modes = getPublicRuntimeConfig();
   return (
     modes.memoryMode === "live" ||
@@ -47,21 +47,21 @@ export function requiresOperator(): boolean {
 /** A public playground grant, never authorization to fabricate a paid receipt. */
 export function judgeSandboxEnabled(): boolean {
   return (
-    process.env.VERDICTO_PUBLIC_JUDGE_MODE === "true" && !requiresOperator()
+    process.env.TRUTH402_PUBLIC_JUDGE_MODE === "true" && !requiresOperator()
   );
 }
 
 export function getMemWalConfig(options: { requireWrites?: boolean } = {}) {
-  const mode = providerMode(process.env.VERDICTO_MEMORY_MODE);
+  const mode = providerMode(process.env.TRUTH402_MEMORY_MODE);
   if (mode !== "live") return { mode } as const;
 
   if (
     options.requireWrites &&
-    process.env.VERDICTO_ENABLE_MAINNET_WRITES !== "true"
+    process.env.TRUTH402_ENABLE_MAINNET_WRITES !== "true"
   ) {
     throw new AppError(
       "MAINNET_WRITES_LOCKED",
-      "Walrus live mode also requires VERDICTO_ENABLE_MAINNET_WRITES=true.",
+      "Walrus live mode also requires TRUTH402_ENABLE_MAINNET_WRITES=true.",
       503,
     );
   }
@@ -92,7 +92,7 @@ export function getMemWalConfig(options: { requireWrites?: boolean } = {}) {
   if (canonicalUrl(parsed.data.serverUrl) !== MAINNET_RELAYER_URL) {
     throw new AppError(
       "MEMWAL_NOT_MAINNET",
-      `Verdicto live mode requires the canonical Mainnet relayer ${MAINNET_RELAYER_URL}.`,
+      `TRUTH402 live mode requires the canonical Mainnet relayer ${MAINNET_RELAYER_URL}.`,
       503,
     );
   }
@@ -105,7 +105,7 @@ export function getMemWalConfig(options: { requireWrites?: boolean } = {}) {
 }
 
 export function getTatumConfig() {
-  const mode = providerMode(process.env.VERDICTO_TATUM_MODE);
+  const mode = providerMode(process.env.TRUTH402_TATUM_MODE);
   if (mode !== "live") return { mode } as const;
 
   const parsed = z
@@ -130,7 +130,7 @@ export function getTatumConfig() {
   if (canonicalUrl(parsed.data.rpcUrl) !== TATUM_SUI_MAINNET_URL) {
     throw new AppError(
       "TATUM_NOT_SUI_MAINNET",
-      `Verdicto requires the canonical Tatum Sui Mainnet gateway ${TATUM_SUI_MAINNET_URL}.`,
+      `TRUTH402 requires the canonical Tatum Sui Mainnet gateway ${TATUM_SUI_MAINNET_URL}.`,
       503,
     );
   }
@@ -143,7 +143,7 @@ export function getTatumConfig() {
 }
 
 export function getOraclePaymentConfig() {
-  const mode = providerMode(process.env.VERDICTO_TATUM_MODE);
+  const mode = providerMode(process.env.TRUTH402_TATUM_MODE);
   if (mode === "demo")
     return {
       mode,
@@ -191,7 +191,7 @@ export function getTatumPredictionConfig() {
 }
 
 export function getAgentRouterConfig() {
-  const mode = providerMode(process.env.VERDICTO_AI_MODE);
+  const mode = providerMode(process.env.TRUTH402_AI_MODE);
   if (mode !== "live") return { mode } as const;
 
   const parsed = z

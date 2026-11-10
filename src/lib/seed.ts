@@ -15,7 +15,7 @@ import type {
   ParticipantRole,
   RecalledMemory,
   Trade,
-  VerdictoMemoryKind,
+  TRUTH402MemoryKind,
 } from "@/types/domain";
 import type {
   OraclePaymentRecord,
@@ -25,7 +25,7 @@ import type {
   PredictionTrader,
 } from "@/types/oracle";
 
-export interface VerdictoDatabase {
+export interface TRUTH402Database {
   version: 1;
   markets: Market[];
   demoMemories: RecalledMemory[];
@@ -646,7 +646,7 @@ function predictionMarkets(): Market[] {
   );
 }
 
-export function createSeedDatabase(): VerdictoDatabase {
+export function createSeedDatabase(): TRUTH402Database {
   const markets = seedMarkets();
   const demoMemories: RecalledMemory[] = markets
     .filter((market) => market.status === "resolved")
@@ -723,7 +723,7 @@ export function createSeedDatabase(): VerdictoDatabase {
 function buildRecordReference(text: string): {
   marketId: string;
   recordId: string;
-  kind: VerdictoMemoryKind;
+  kind: TRUTH402MemoryKind;
   occurredAt: string;
 } | null {
   const record = parseMemory(text);

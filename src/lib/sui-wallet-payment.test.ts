@@ -31,13 +31,13 @@ describe("buyer-funded native USDC invoice PTBs", () => {
   let directory: string;
   beforeEach(async () => {
     directory = await mkdtemp(path.join(tmpdir(), "truth402-wallet-ptb-"));
-    vi.stubEnv("VERDICTO_TATUM_MODE", "live");
+    vi.stubEnv("TRUTH402_TATUM_MODE", "live");
     vi.stubEnv("SUI_ORACLE_ADDRESS", recipient);
     vi.stubEnv("TATUM_API_KEY", "test-tatum-key");
     vi.stubEnv("TATUM_SUI_RPC_URL", "https://sui-mainnet.gateway.tatum.io");
-    vi.stubEnv("VERDICTO_STORAGE_MODE", "file");
-    vi.stubEnv("VERDICTO_DATA_FILE", path.join(directory, "state.json"));
-    vi.stubEnv("VERDICTO_ORACLE_SINGLE_INSTANCE", "true");
+    vi.stubEnv("TRUTH402_STORAGE_MODE", "file");
+    vi.stubEnv("TRUTH402_DATA_FILE", path.join(directory, "state.json"));
+    vi.stubEnv("TRUTH402_ORACLE_SINGLE_INSTANCE", "true");
     vi.stubEnv("VERCEL", "");
     await resetStoreForTests();
     clearRateLimitState();

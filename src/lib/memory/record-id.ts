@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-import type { VerdictoMemoryKind, VerdictoMemoryRecord } from "@/types/domain";
+import type { TRUTH402MemoryKind, TRUTH402MemoryRecord } from "@/types/domain";
 
 export const MEMORY_SCHEMA_NAME = "verdicto.memory" as const;
 export const MEMORY_SCHEMA_VERSION = 1 as const;
@@ -10,7 +10,7 @@ export const MEMORY_SCHEMA_VERSION = 1 as const;
  * the selected outcome for a resolution, the representative price leader for a
  * signal, or the participant for a performance observation.
  */
-export function memoryRecordSubject(record: VerdictoMemoryRecord): string {
+export function memoryRecordSubject(record: TRUTH402MemoryRecord): string {
   switch (record.kind) {
     case "market_resolution":
       return record.winningOutcomeId;
@@ -36,7 +36,7 @@ export function memoryRecordSubject(record: VerdictoMemoryRecord): string {
  */
 export function createMemoryRecordId(input: {
   version: number;
-  kind: VerdictoMemoryKind;
+  kind: TRUTH402MemoryKind;
   marketId: string;
   subjectId: string;
 }): string {
@@ -49,7 +49,7 @@ export function createMemoryRecordId(input: {
   return createHash("sha256").update(canonical, "utf8").digest("hex");
 }
 
-export function expectedMemoryRecordId(record: VerdictoMemoryRecord): string {
+export function expectedMemoryRecordId(record: TRUTH402MemoryRecord): string {
   return createMemoryRecordId({
     version: record.version,
     kind: record.kind,
@@ -59,7 +59,7 @@ export function expectedMemoryRecordId(record: VerdictoMemoryRecord): string {
 }
 
 export function assertCanonicalMemoryRecordId(
-  record: VerdictoMemoryRecord,
+  record: TRUTH402MemoryRecord,
 ): void {
   if (record.recordId !== expectedMemoryRecordId(record)) {
     throw new Error(`Memory record ${record.recordId} has a non-canonical ID.`);

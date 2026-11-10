@@ -29,7 +29,7 @@ const ok = all.filter(
     m.closeTime &&
     new Date(m.closeTime) > now &&
     new Date(m.closeTime) < horizon &&
-    Number(m.volume) > 50000 &&
+    Number(m.volume) > 20000 &&
     m.outcomes[0].price > 0.04 &&
     m.outcomes[0].price < 0.96,
 );
@@ -52,7 +52,7 @@ const seen = new Map(),
   picks = [];
 for (const m of ok.sort((a, b) => Number(b.volume) - Number(a.volume))) {
   const b = bucket(m);
-  if ((seen.get(b) || 0) >= 3) continue;
+  if ((seen.get(b) || 0) >= 7) continue;
   seen.set(b, (seen.get(b) || 0) + 1);
   picks.push({
     id: `live-${m.id.slice(2, 14)}`,
@@ -63,7 +63,7 @@ for (const m of ok.sort((a, b) => Number(b.volume) - Number(a.volume))) {
     yesPrice: Number(m.outcomes[0].price),
     volumeUsd: Math.round(Number(m.volume)),
   });
-  if (picks.length >= 12) break;
+  if (picks.length >= 25) break;
 }
 writeFileSync(
   new URL("../src/lib/live-markets.json", import.meta.url),

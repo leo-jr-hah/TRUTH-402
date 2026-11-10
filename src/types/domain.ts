@@ -82,7 +82,7 @@ export interface Trade {
 
 export interface MemoryReceipt {
   recordId: string;
-  kind: VerdictoMemoryKind;
+  kind: TRUTH402MemoryKind;
   status: Exclude<MemoryPublishStatus, "not_started">;
   provider: "demo" | "walrus";
   blobId?: string;
@@ -115,7 +115,7 @@ export interface Market {
   learningUpdate?: ResolutionLearningUpdate;
 }
 
-export type VerdictoMemoryKind =
+export type TRUTH402MemoryKind =
   | "market_resolution"
   | "market_signal"
   | "participant_performance"
@@ -126,7 +126,7 @@ interface MemoryBase {
   /** Positive schema version; parsers accept additive future versions. */
   version: number;
   recordId: string;
-  kind: VerdictoMemoryKind;
+  kind: TRUTH402MemoryKind;
   marketId: string;
   marketType: MarketType;
   marketTitle: string;
@@ -189,7 +189,7 @@ export interface ParticipantPerformanceMemory extends MemoryBase {
   baseline?: LearningRankSnapshot;
 }
 
-export type VerdictoMemoryRecord =
+export type TRUTH402MemoryRecord =
   | MarketResolutionMemory
   | MarketSignalMemory
   | ParticipantPerformanceMemory
@@ -298,7 +298,7 @@ export interface LearningMetrics {
 
 export interface InsightsSnapshot {
   memories: RecalledMemory[];
-  records: VerdictoMemoryRecord[];
+  records: TRUTH402MemoryRecord[];
   /** Equal-weight leaderboard retained as the default and compatibility path. */
   leaderboard: Credibility[];
   calibration: CalibrationBucket[];

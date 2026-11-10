@@ -8,7 +8,7 @@ import type {
   MarketType,
   ParticipantPerformanceMemory,
   RecalledMemory,
-  VerdictoMemoryRecord,
+  TRUTH402MemoryRecord,
   ProfitTrustParticipant,
   ShrinkageSkillScore,
   SkillClassification,
@@ -106,7 +106,7 @@ export function computeShrinkageSkillScore(
   };
 }
 
-/** Compatibility view for the original Verdicto display API. */
+/** Compatibility view for the original TRUTH402 display API. */
 export function computeShrinkageSkill(edges: number[]) {
   const score = computeShrinkageSkillScore(edges);
   return {
@@ -549,8 +549,8 @@ export function betaCredibleInterval(
 
 export function uniqueRecords(
   memories: RecalledMemory[],
-): VerdictoMemoryRecord[] {
-  const records = new Map<string, VerdictoMemoryRecord>();
+): TRUTH402MemoryRecord[] {
+  const records = new Map<string, TRUTH402MemoryRecord>();
   for (const memory of memories) {
     const record = parseMemory(memory.text);
     if (record && !records.has(record.recordId)) {
@@ -561,7 +561,7 @@ export function uniqueRecords(
 }
 
 function performanceRecords(
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
 ): ParticipantPerformanceMemory[] {
   return records
     .filter(
@@ -585,14 +585,14 @@ function newestObservationTimestamp(
 }
 
 export function recencyAnchorAt(
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
 ): string | null {
   const timestamp = newestObservationTimestamp(performanceRecords(records));
   return timestamp === null ? null : new Date(timestamp).toISOString();
 }
 
 function weightedObservations(
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
   options: DerivationOptions,
 ): WeightedObservation[] {
   const observations = performanceRecords(records);
@@ -677,7 +677,7 @@ function scoreBreakdown(score: ScoreAccumulator): CredibilityBreakdown | null {
 }
 
 export function deriveCredibility(
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
   options: DerivationOptions = {},
 ): Credibility[] {
   const observations = weightedObservations(records, options);
@@ -799,7 +799,7 @@ export function deriveCredibility(
 }
 
 export function deriveCalibration(
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
   options: DerivationOptions = {},
 ): CalibrationBucket[] {
   const buckets = CALIBRATION_BUCKETS.map((definition) => ({
@@ -854,7 +854,7 @@ export function deriveCalibration(
 
 export function deriveLearningMetrics(
   memories: RecalledMemory[],
-  records: VerdictoMemoryRecord[],
+  records: TRUTH402MemoryRecord[],
 ): LearningMetrics {
   const resolutions = records.filter(
     (record) => record.kind === "market_resolution",

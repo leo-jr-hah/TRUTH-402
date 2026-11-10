@@ -91,11 +91,11 @@ npm audit
 The smoke test is `scripts/smoke-demo.ts`, invoked by `npm run smoke`. It is not an undefined manual reference. Run a production server in explicit demo/memory mode, then execute the runner from another terminal:
 
 ```bash
-VERDICTO_MEMORY_MODE=demo \
-VERDICTO_TATUM_MODE=demo \
-VERDICTO_AI_MODE=demo \
-VERDICTO_STORAGE_MODE=memory \
-VERDICTO_ENABLE_MAINNET_WRITES=false \
+TRUTH402_MEMORY_MODE=demo \
+TRUTH402_TATUM_MODE=demo \
+TRUTH402_AI_MODE=demo \
+TRUTH402_STORAGE_MODE=memory \
+TRUTH402_ENABLE_MAINNET_WRITES=false \
 NEXT_TELEMETRY_DISABLED=1 \
 npm run start
 

@@ -28,14 +28,14 @@ const timestampMs = "1792929600000";
 const fetchMock = vi.fn<typeof fetch>();
 
 function live() {
-  vi.stubEnv("VERDICTO_TATUM_MODE", "live");
+  vi.stubEnv("TRUTH402_TATUM_MODE", "live");
   vi.stubEnv("TATUM_API_KEY", secret);
   vi.stubEnv("TATUM_SUI_RPC_URL", TATUM_SUI_MAINNET_URL);
   vi.stubEnv("SUI_ORACLE_ADDRESS", recipient);
 }
 
 function rpcResult(result: unknown) {
-  return Response.json({ jsonrpc: "2.0", id: "verdicto", result });
+  return Response.json({ jsonrpc: "2.0", id: "truth402", result });
 }
 
 function tx(overrides: Record<string, unknown> = {}) {
@@ -337,7 +337,7 @@ describe("Tatum four-pillar adapters", () => {
       .mockResolvedValueOnce(
         Response.json({
           jsonrpc: "2.0",
-          id: "verdicto",
+          id: "truth402",
           error: { code: -1, message: secret },
         }),
       )

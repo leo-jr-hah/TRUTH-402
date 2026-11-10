@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-10T07:31:36.278Z",
+  "fetchedAt": "2026-11-10T08:55:21.676Z",
   "markets": [
     {
       "id": "live-752fa61c93f1",
@@ -8,7 +8,7 @@
       "category": "crypto",
       "closesAt": "2027-01-01T00:00:00.000Z",
       "yesPrice": 0.095,
-      "volumeUsd": 7654086
+      "volumeUsd": 7654087
     },
     {
       "id": "live-3de0f3d7d7ef",
@@ -35,7 +35,7 @@
       "category": "crypto",
       "closesAt": "2027-01-01T00:00:00.000Z",
       "yesPrice": 0.1245,
-      "volumeUsd": 3400741
+      "volumeUsd": 3400763
     },
     {
       "id": "live-4167e22670f3",
@@ -47,13 +47,22 @@
       "volumeUsd": 2967064
     },
     {
+      "id": "live-bb379a14cd03",
+      "title": "Will Bitcoin reach $90,000 by December 31, 2026?",
+      "description": "This market will immediately resolve to \"Yes\" if any Binance 1 minute candle for Bitcoin (BTC/USDT) between the creation of this market and December 31, 2026, 23:59 in the ET timezone has a final \"High\" price equal to or greater than the price specified in the title. Otherwise, this market will resolve to \"No.\"\n\nThe resolution source for this market is Binance, specifically the BTC/USDT \"High\" pri",
+      "category": "crypto",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.18,
+      "volumeUsd": 2917434
+    },
+    {
       "id": "live-857398c4502b",
       "title": "AI bubble burst in 2026?",
       "description": "This market will resolve to \"Yes\" if the AI industry experiences an industry downturn by the specified date, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nFor the purposes of this market, the AI industry will be considered to have experienced an industry downturn once at least three of the following events have occurred within 90 days of this market's specified timeframe:\n- NVIDIA Cor",
       "category": "world",
       "closesAt": "2027-01-01T00:00:00.000Z",
-      "yesPrice": 0.0715,
-      "volumeUsd": 2777613
+      "yesPrice": 0.0705,
+      "volumeUsd": 2777687
     },
     {
       "id": "live-3d2fc07e08c4",
@@ -70,8 +79,8 @@
       "description": "This market will resolve to the largest company in the world by market cap on December 31, 2026, as of market close.\n\nThe resolution source for this market will be a consensus of credible reporting.",
       "category": "macro",
       "closesAt": "2027-01-01T00:00:00.000Z",
-      "yesPrice": 0.305,
-      "volumeUsd": 1789862
+      "yesPrice": 0.315,
+      "volumeUsd": 1790231
     },
     {
       "id": "live-06b066958f04",
@@ -81,6 +90,33 @@
       "closesAt": "2027-01-01T00:00:00.000Z",
       "yesPrice": 0.105,
       "volumeUsd": 1717822
+    },
+    {
+      "id": "live-e96dbaceb816",
+      "title": "Will Anthropic have the highest IPO Market Cap 2026?",
+      "description": "This market will resolve to the company that achieves the highest market capitalization in U.S. dollars based on the official closing price on its first trading day in 2026.\n\nThis market will resolve to a company that completes an Initial Public Offering (IPO) between January 1 and December 31, 2026, 11:59 PM ET.\n\nMarket capitalization is defined as the total number of outstanding shares multiplie",
+      "category": "world",
+      "closesAt": "2027-01-02T00:00:00.000Z",
+      "yesPrice": 0.096,
+      "volumeUsd": 1645128
+    },
+    {
+      "id": "live-cc59c2569d30",
+      "title": "Extended FDV above $300M one day after launch?",
+      "description": "This market will resolve to \"Yes\" if the Fully Diluted Valuation of Extended's token is greater than the value specified in the title 1 day after launch. Otherwise, the market will resolve to \"No.\"\n\nThe token must be actively, publicly transferable and tradable to be considered a launch.\n\nThe FDV will be determined using the total token supply multiplied by the token price.\n\n\"1 day after launch\" i",
+      "category": "crypto",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.285,
+      "volumeUsd": 1570636
+    },
+    {
+      "id": "live-e4f4b614a6c2",
+      "title": "Will Avengers: Doomsday be the top grossing movie of 2026?",
+      "description": "This market will resolve according to the title of the film with the highest 2026 gross according to the \"Gross\" column on https://www.boxofficemojo.com/year/2026/?grossesOption=calendarGrosses once data for December 31 is made available. \n\nNote: This market is about the movie's domestic calendar gross in 2026 - dates outside of 2026 will not count toward this movie's gross.\n\nIn the event of an ex",
+      "category": "world",
+      "closesAt": "2027-01-08T00:00:00.000Z",
+      "yesPrice": 0.0995,
+      "volumeUsd": 1558191
     },
     {
       "id": "live-4437c8690e2e",
@@ -98,7 +134,52 @@
       "category": "macro",
       "closesAt": "2027-01-01T00:00:00.000Z",
       "yesPrice": 0.6695,
-      "volumeUsd": 1476035
+      "volumeUsd": 1477298
+    },
+    {
+      "id": "live-1c842b91d226",
+      "title": "Metamask FDV above $700M one day after launch?",
+      "description": "This market will resolve to \"Yes\" if the Fully Diluted Valuation of Metamask's token is greater than the value specified in the title 1 day after launch. Otherwise, the market will resolve to \"No.\"\n\nThe token must be actively, publicly transferable and tradable to be considered a launch.\n\n\"1 day after launch\" is defined as 4:00 PM ET on the calendar day following launch. The resolution source for ",
+      "category": "crypto",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.044,
+      "volumeUsd": 1402377
+    },
+    {
+      "id": "live-858b982b9ea1",
+      "title": "Will SpaceX have the highest IPO Market Cap 2026?",
+      "description": "This market will resolve to the company that achieves the highest market capitalization in U.S. dollars based on the official closing price on its first trading day in 2026.\n\nThis market will resolve to a company that completes an Initial Public Offering (IPO) between January 1 and December 31, 2026, 11:59 PM ET.\n\nMarket capitalization is defined as the total number of outstanding shares multiplie",
+      "category": "world",
+      "closesAt": "2027-01-02T00:00:00.000Z",
+      "yesPrice": 0.89,
+      "volumeUsd": 1394611
+    },
+    {
+      "id": "live-c6e54956b79d",
+      "title": "US strike on Colombia by December 31?",
+      "description": "This market will resolve to \"Yes\" if a US-initiated drone, missile, or air strike on the soil of Colombia is announced or credibly reported to have occurred by the listed date ET. Otherwise, this market will resolve to \"No\".\n\nFor the purposes of this market, a qualifying \"strike\" is defined as the use of aerial bombs, drones, or missiles (including FPV and ATGM strikes as well as cruise or ballist",
+      "category": "politics",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.165,
+      "volumeUsd": 1256438
+    },
+    {
+      "id": "live-0a3846672319",
+      "title": "Will GitLab be acquired before 2027?",
+      "description": "This market will resolve to “Yes” if credible reporting confirms that any entity enters into an agreement to acquire the listed company by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.\n\nMergers where the listed company is subsumed by another entity will count toward a \"Yes\" resolution.\n\nAn announced agreement between the listed company and an acquiring entity will qu",
+      "category": "world",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.065,
+      "volumeUsd": 1207204
+    },
+    {
+      "id": "live-21bf9a7dae81",
+      "title": "Will Ukraine agree to cede territory to Russia before 2027?",
+      "description": "This market will resolve to \"Yes\" if a deal in which Ukraine agrees to cede any territory under its control at the time of the agreement is reached between the Russian Federation and Ukraine by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.\n\nThe deal must be a publicly announced mutual agreement or otherwise confirmed by an overwhelming consensus of credible reporting",
+      "category": "politics",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.051,
+      "volumeUsd": 839428
     },
     {
       "id": "live-bfc776a7f419",
@@ -107,7 +188,43 @@
       "category": "sports",
       "closesAt": "2027-01-01T00:00:00.000Z",
       "yesPrice": 0.625,
-      "volumeUsd": 756591
+      "volumeUsd": 756609
+    },
+    {
+      "id": "live-3e0845c4736a",
+      "title": "Will Iran withdraw from the NPT before 2027?",
+      "description": "This market will resolve to \"Yes\" if the Islamic Republic of Iran formally notifies the United Nations of its decision to withdraw from the Nuclear Non-Proliferation Treaty (NPT), pursuant to Article X of the treaty by December 31, 2026 at 11:59 PM ET. Otherwise, this market will resolve to \"No.\"\n\nTo qualify, the Iranian government must issue an official written notice that explicitly states its i",
+      "category": "politics",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.0595,
+      "volumeUsd": 673896
+    },
+    {
+      "id": "live-b0dafd2efe99",
+      "title": "Metamask FDV above $1B one day after launch?",
+      "description": "This market will resolve to \"Yes\" if the Fully Diluted Valuation of Metamask's token is greater than the value specified in the title 1 day after launch. Otherwise, the market will resolve to \"No.\"\n\nThe token must be actively, publicly transferable and tradable to be considered a launch.\n\n\"1 day after launch\" is defined as 4:00 PM ET on the calendar day following launch. The resolution source for ",
+      "category": "crypto",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.0525,
+      "volumeUsd": 634428
+    },
+    {
+      "id": "live-890f9b8de730",
+      "title": "Pedro Sánchez out as PM of Spain by December 31, 2026?",
+      "description": "This market will resolve to “Yes” if Pedro Sánchez ceases to be Prime Minister of Spain for any period of time between market creation and the specified date (ET). Otherwise, this market will resolve to “No”.\n\nAn announcement of Pedro Sánchez's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal goes ",
+      "category": "politics",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.145,
+      "volumeUsd": 553172
+    },
+    {
+      "id": "live-cede29c8af89",
+      "title": "Will a team from LPL (China) win LoL Worlds 2026?",
+      "description": "This market will resolve according to the region or country of the esports team winning 1st place in the League of Legends 2026 Season World Championship (Worlds 2026).\n\nIf the winner of Worlds 2026 is not determined by December 31, 2026 ET, this market will resolve to \"Other\".\n\nThe resolution source for this market will be official information from Fandom (https://lol.fandom.com/wiki/2026_Season_",
+      "category": "sports",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.375,
+      "volumeUsd": 451532
     }
   ]
 }

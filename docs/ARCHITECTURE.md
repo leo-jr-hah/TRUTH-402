@@ -31,7 +31,7 @@ Next.js App Router uses Server Components for initial data and client components
 
 ## 2. Market mechanics and resolution
 
-Markets retain the Verdicto `simple` and `opportunity` types. Their prices are simulated LMSR probabilities, not an imported orderbook or tradable asset:
+Markets retain the TRUTH402 `simple` and `opportunity` types. Their prices are simulated LMSR probabilities, not an imported orderbook or tradable asset:
 
 ```text
 C(q) = b × ln(Σ exp(q_i / b))
@@ -118,7 +118,7 @@ Subjects are the winning outcome, closing leader, participant, or forecast conte
 a731366e8be6f597d3ad0852d099e44b979f2366a96c54f7a625aea1fb4dcd55
 ```
 
-The fresh seed adds 42 records across eight synthetic resolved scenarios, for **62 records**. It includes 22 markets: 11 resolved and 11 open. New sports/crypto/macro/governance records carry synthetic provenance and category labels. Existing file-backed databases are not reseeded. Namespace `truth402` is the new default; old `verdicto` namespaces must remain explicitly configured to recall those records.
+The fresh seed adds 42 records across eight synthetic resolved scenarios, for **62 records**. It includes 22 markets: 11 resolved and 11 open. New sports/crypto/macro/governance records carry synthetic provenance and category labels. Existing file-backed databases are not reseeded. Namespace `truth402` is the new default; old `truth402` namespaces must remain explicitly configured to recall those records.
 
 Additive synthetic performance records include `episode: wallet_backfill` and a baseline score/rank snapshot. Baselines are derived from the complete deterministic fixture; they are not claimed to have existed before those scenarios resolved. Scoring always recomputes from observations, never trusts a stored baseline or rank field.
 
@@ -178,7 +178,7 @@ The browser has a zero-dependency Wallet Standard connector. It uses the Sui SDK
 
 Every new snapshot carries information metrics and largest-remainder integer royalty allocation. The fixed 8000-micro-USDC backer pool uses `W * log1p(conviction)`; 2000 micro-USDC is protocol allocation. Empty/zero-weight pools stay unallocated. New canonical hashes bind economics; legacy hashes and stored snapshots remain unchanged. KL with positive mass over zero market probability is represented as `null` plus `klDivergenceInfinite=true`, not a silently clamped finite estimate. Paid USDC receipts store allocation once; sandbox grants and native-SUI fallback payments do not accrue USDC royalties. No payouts execute.
 
-Explicit `VERDICTO_PUBLIC_JUDGE_MODE=true` removes operator authorization but not write locks, request limits or durable storage requirements. A separate sponsored-sandbox POST consumes a grant invoice and checks the configured checkpoint without issuing a payment receipt or changing revenue. Header-only fake payments remain rejected. Strict PTB binding is default; only an explicit `VERDICTO_REQUIRE_STRICT_PTB_BINDING=false` enables the weaker time-window alternative documented in the security policy.
+Explicit `TRUTH402_PUBLIC_JUDGE_MODE=true` removes operator authorization but not write locks, request limits or durable storage requirements. A separate sponsored-sandbox POST consumes a grant invoice and checks the configured checkpoint without issuing a payment receipt or changing revenue. Header-only fake payments remain rejected. Strict PTB binding is default; only an explicit `TRUTH402_REQUIRE_STRICT_PTB_BINDING=false` enables the weaker time-window alternative documented in the security policy.
 
 ## 9. Tatum duties and operational boundaries
 

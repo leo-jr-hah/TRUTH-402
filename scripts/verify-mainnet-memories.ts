@@ -103,7 +103,7 @@ void main().catch((error: unknown) => {
     "MEMWAL_PRIVATE_KEY",
     "TATUM_API_KEY",
     "AGENT_ROUTER_API_KEY",
-    "VERDICTO_ORACLE_ADMIN_TOKEN",
+    "TRUTH402_ORACLE_ADMIN_TOKEN",
   ]) {
     const secret = process.env[name];
     if (secret) message = message.replaceAll(secret, "[redacted]");

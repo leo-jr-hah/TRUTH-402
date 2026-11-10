@@ -36,13 +36,13 @@ export function stripUnsafeControls(value: string): string {
  * React still provides the required context-aware HTML escaping at render time.
  * This storage boundary additionally removes controls/bidi overrides, normalizes
  * em dashes, collapses line breaks, neutralizes HTML brackets, and prevents a
- * user string from imitating Verdicto's line-delimited memory envelope marker.
+ * user string from imitating TRUTH402's line-delimited memory envelope marker.
  */
 export function sanitizeUserText(value: string): string {
   return removeEmDashes(stripUnsafeControls(value.normalize("NFKC")))
     .replaceAll("<", "‹")
     .replaceAll(">", "›")
-    .replace(RESERVED_MEMORY_MARKER, "VERDICTO DATA V")
+    .replace(RESERVED_MEMORY_MARKER, "TRUTH402 DATA V")
     .replace(/\s+/gu, " ")
     .trim();
 }

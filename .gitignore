@@ -34,7 +34,7 @@ yarn-error.log*
 .env*
 !.env.example
 
-# local Verdicto state and private Mainnet receipts
+# local TRUTH402 state and private Mainnet receipts
 /.data/
 
 # vercel

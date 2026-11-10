@@ -11,12 +11,12 @@ import type {
   IntegrationCheck,
   MemoryReceipt,
   RecalledMemory,
-  VerdictoMemoryRecord,
+  TRUTH402MemoryRecord,
 } from "@/types/domain";
 
 export interface MemoryProvider {
   readonly mode: "demo" | "live";
-  remember(record: VerdictoMemoryRecord): Promise<MemoryReceipt>;
+  remember(record: TRUTH402MemoryRecord): Promise<MemoryReceipt>;
   recall(query: string, limit: number): Promise<RecalledMemory[]>;
   listMemories(limit: number): Promise<RecalledMemory[]>;
   check(): Promise<IntegrationCheck>;
@@ -38,7 +38,7 @@ function tokens(value: string): Set<string> {
 class DemoMemoryProvider implements MemoryProvider {
   readonly mode = "demo" as const;
 
-  async remember(record: VerdictoMemoryRecord): Promise<MemoryReceipt> {
+  async remember(record: TRUTH402MemoryRecord): Promise<MemoryReceipt> {
     const now = new Date().toISOString();
     const blobId = `demo-${record.recordId}`;
     await putDemoMemory(
@@ -131,7 +131,7 @@ class WalrusMemoryProvider implements MemoryProvider {
     });
   }
 
-  async remember(record: VerdictoMemoryRecord): Promise<MemoryReceipt> {
+  async remember(record: TRUTH402MemoryRecord): Promise<MemoryReceipt> {
     const client = this.client(true);
     try {
       const result = await client.rememberAndWait(
@@ -195,7 +195,7 @@ class WalrusMemoryProvider implements MemoryProvider {
     try {
       const result = await client.recall({
         query:
-          "Verdicto memory market resolution signal participant performance credibility",
+          "TRUTH402 memory market resolution signal participant performance credibility",
         limit: Math.min(limit, 100),
         sort: "recent",
         timeoutMs: 20_000,
