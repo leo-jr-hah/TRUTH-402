@@ -1,65 +1,165 @@
-import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
-export default function Home() {
+import { MarketRail, type RailMarket } from "@/components/landing/market-rail";
+import { OrbitScene } from "@/components/landing/orbit-scene";
+import { RankComparison } from "@/components/rank-comparison";
+import { StackStrip } from "@/components/landing/stack-strip";
+import { TrustDial } from "@/components/landing/trust-dial";
+import { Reveal } from "@/components/ui/reveal";
+import { getPublicRuntimeConfig } from "@/lib/config";
+import { parseMemory } from "@/lib/memory/codec";
+import { buildPredictionCalibration } from "@/lib/memory/prediction";
+import { removeEmDashes } from "@/lib/sanitize";
+import { createPredictionFixture } from "@/lib/seed";
+import { getInsightsSnapshot } from "@/lib/services/insights";
+import { getMarkets } from "@/lib/services/markets";
+import { buildOracleSnapshot } from "@/lib/services/oracle";
+
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const [markets, insights] = await Promise.all([
+    getMarkets(),
+    getInsightsSnapshot(undefined, 100),
+  ]);
+  const open = markets.filter((m) => m.status === "open");
+  const sports = [...open].sort(
+    (a, b) =>
+      Number(b.tags.includes("sports")) - Number(a.tags.includes("sports")),
+  );
+  const hero = open.find((m) => m.id === "mkt-sports-final") ?? open[0];
+  const fixture = createPredictionFixture();
+  const benchmark =
+    getPublicRuntimeConfig().memoryMode === "live"
+      ? { entries: insights.leaderboard }
+      : buildPredictionCalibration(fixture.traders, fixture.positions);
+  const blobByParticipant = new Map<string, string>();
+  for (const memory of insights.memories) {
+    const parsed = parseMemory(memory.text);
+    if (
+      parsed?.kind === "participant_performance" &&
+      !blobByParticipant.has(parsed.displayName.toLocaleLowerCase())
+    ) {
+      blobByParticipant.set(
+        parsed.displayName.toLocaleLowerCase(),
+        parsed.recordId,
+      );
+    }
+  }
+  const traders = benchmark.entries.map((e) => {
+    const cleanName = removeEmDashes(e.displayName);
+    const matchedRecordId = blobByParticipant.get(
+      cleanName.toLocaleLowerCase(),
+    );
+    return {
+      id: e.participantId,
+      name: cleanName,
+      profitRank: e.profitRank,
+      trustRank: e.trustRank,
+      profit:
+        "leaderboardPnlUsd" in e && typeof e.leaderboardPnlUsd === "number"
+          ? e.leaderboardPnlUsd
+          : e.rawPnl,
+      skill: e.shrinkageSkillScore,
+      samples: e.totalCount,
+      ...(matchedRecordId ? { blobId: matchedRecordId } : {}),
+    };
+  });
+
+  const rail: RailMarket[] = sports.slice(0, 8).map((m) => {
+    const lead = [...m.outcomes].sort((a, b) => b.price - a.price)[0];
+    const sig = buildOracleSnapshot(
+      m,
+      insights,
+    ).memoryCalibratedProbabilities.find((s) => s.outcomeId === lead.id);
+    return {
+      id: m.id,
+      title: removeEmDashes(m.title),
+      lead: removeEmDashes(lead.label),
+      crowd: Math.round(lead.price * 100),
+      record: sig ? Math.round(sig.oracleProbability * 100) : undefined,
+      traders: new Set(m.trades.map((t) => t.participantId)).size,
+      category: m.tags.includes("sports")
+        ? "sports"
+        : m.tags.includes("crypto")
+          ? "crypto"
+          : m.tags.includes("macro") || m.tags.includes("strategy")
+            ? "macro"
+            : undefined,
+    };
+  });
+  const heroRail =
+    rail.find((r) => r.id === hero?.id && r.record !== undefined) ??
+    rail.find((r) => r.record !== undefined);
+  const crowd = heroRail?.crowd ?? 60;
+  const record = heroRail?.record ?? 66;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="space-y-24 sm:space-y-32">
+      <section
+        data-theme="dark"
+        className="relative isolate -mt-1 h-[min(calc(100svh-6.5rem),52rem)] min-h-[560px] overflow-hidden rounded-[2rem]"
+      >
+        <OrbitScene
+          traders={traders}
+          crowd={crowd}
+          record={record}
+          marketTitle={heroRail?.title ?? "Featured market"}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-6 p-6 sm:p-10">
+          <div className="max-w-[34rem]">
+            <h1 className="display text-fog text-[clamp(2.2rem,5.2vw,4.4rem)]">
+              Odds, weighted by who has been right.
+            </h1>
+            <Link
+              href={hero ? `/markets/${hero.id}` : "/markets"}
+              className="button-primary !bg-fog !text-navy pointer-events-auto mt-6"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              Enter a market <ArrowRight size={18} />
+            </Link>
+          </div>
+          <p className="text-fog/70 max-w-[15rem] text-xs leading-relaxed">
+            Close to the core: trusted track record. Big bubble: big profit.{" "}
+            Walrus Mainnet Memory · Tatum Sui RPC · HTTP 402.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </section>
+
+      <Reveal>
+        <StackStrip />
+      </Reveal>
+
+      <Reveal>
+        <section aria-label="Weight track record">
+          <h2 className="display max-w-2xl text-[clamp(2rem,4.5vw,3.6rem)]">
+            Same market. Two answers.
+          </h2>
+          <div className="mt-10">
+            <TrustDial
+              crowd={crowd}
+              record={record}
+              title={heroRail?.title ?? "Featured market"}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+        </section>
+      </Reveal>
+
+      <Reveal>
+        <RankComparison rows={traders} />
+      </Reveal>
+
+      <section aria-label="Open markets">
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <h2 className="display text-[clamp(2rem,4.5vw,3.6rem)]">
+            Open markets
+          </h2>
+          <Link href="/markets" className="button-secondary">
+            All markets <ArrowRight size={16} />
+          </Link>
         </div>
-      </main>
+        <MarketRail markets={rail} />
+      </section>
     </div>
   );
 }

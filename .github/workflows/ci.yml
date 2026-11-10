@@ -1,0 +1,55 @@
+name: TRUTH-402 CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VERDICTO_MEMORY_MODE: demo
+      VERDICTO_TATUM_MODE: demo
+      VERDICTO_AI_MODE: demo
+      VERDICTO_STORAGE_MODE: memory
+      VERDICTO_ENABLE_MAINNET_WRITES: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Format, type, lint, and unit tests
+        run: npm run check
+
+      - name: Enforce domain coverage thresholds
+        run: npm run test:coverage
+
+      - name: Build production application
+        run: NODE_OPTIONS="--import=$(pwd)/scripts/demo-network-guard.mjs" npm run build
+
+      - name: Verify offline TCP guard
+        run: npm run test:network-guard
+
+      - name: Preview memory manifest offline
+        run: npm run memories:preview
+
+      - name: Exercise isolated production demo without external TCP
+        run: npm run smoke:production
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev
