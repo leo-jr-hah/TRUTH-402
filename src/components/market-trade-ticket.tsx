@@ -169,7 +169,7 @@ export function TradeTicket(props: TicketProps) {
                   </span>
                   <LiveNum
                     value={outcome.price}
-                    format={(n) => `${(n * 100).toFixed(0)}¢`}
+                    format={(n) => `${(n * 100).toFixed(0)}%`}
                     className="num relative w-12 shrink-0 text-right text-sm font-semibold"
                   />
                 </button>
@@ -310,7 +310,7 @@ export function TradeTicket(props: TicketProps) {
                 <dd className="num min-w-0 truncate font-semibold">
                   <LiveNum
                     value={amount / impact.shares}
-                    format={(n) => `${(n * 100).toFixed(1)}¢`}
+                    format={(n) => `${(n * 100).toFixed(1)}%`}
                     flash={false}
                   />
                 </dd>

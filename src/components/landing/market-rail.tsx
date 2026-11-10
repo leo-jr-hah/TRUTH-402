@@ -113,7 +113,7 @@ export function MarketRail({ markets }: { markets: RailMarket[] }) {
                       </span>
                       <span className="num font-display text-3xl leading-none font-bold">
                         {m.crowd}
-                        <span className="text-lg opacity-60">¢</span>
+                        <span className="text-lg opacity-60">%</span>
                       </span>
                     </div>
                     <div className="mt-3 flex items-center gap-2">

@@ -21,7 +21,7 @@ function ChoiceArt({ active }: { active: boolean }) {
           <div key={r.key}>
             <div className="num mb-1.5 flex justify-between text-sm font-medium">
               <span>{r.label}</span>
-              <span>{Math.round(v * 100)}¢</span>
+              <span>{Math.round(v * 100)}%</span>
             </div>
             <div className="bg-ink/10 relative h-1.5 rounded-full">
               <motion.div
