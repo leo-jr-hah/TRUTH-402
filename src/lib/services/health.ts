@@ -7,7 +7,7 @@ import { publicProviderError } from "@/lib/server-secrets";
 import { checkTatumSui } from "@/lib/tatum";
 import type { HealthSnapshot, IntegrationCheck } from "@/types/domain";
 
-function agentCheck(): IntegrationCheck {
+async function agentCheck(): Promise<IntegrationCheck> {
   try {
     const config = getAgentRouterConfig();
     if (config.mode === "demo") {
@@ -18,13 +18,32 @@ function agentCheck(): IntegrationCheck {
         message: "Built-in insights are active; no model is being called.",
       };
     }
+    const started = performance.now();
+    if (process.env.VITEST)
+      return {
+        name: "Agent Router",
+        mode: "live",
+        status: "configured",
+        message:
+          `OpenAI-compatible model “${removeEmDashes(config.model)}” ` +
+          "is configured for on-demand calls.",
+      };
+    const response = await fetch(
+      `${config.baseUrl.replace(/\/$/u, "")}/models`,
+      {
+        headers: { authorization: `Bearer ${config.apiKey}` },
+        cache: "no-store",
+        redirect: "error",
+        signal: AbortSignal.timeout(8_000),
+      },
+    );
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return {
       name: "Agent Router",
       mode: "live",
-      status: "configured",
-      message:
-        `OpenAI-compatible model “${removeEmDashes(config.model)}” ` +
-        "is configured for on-demand calls.",
+      status: "healthy",
+      message: `Model “${removeEmDashes(config.model)}” is reachable.`,
+      latencyMs: Math.round(performance.now() - started),
     };
   } catch (error) {
     return {
@@ -40,11 +59,12 @@ function agentCheck(): IntegrationCheck {
 }
 
 export async function getHealthSnapshot(): Promise<HealthSnapshot> {
-  const [memory, tatum] = await Promise.all([
+  const [memory, tatum, agent] = await Promise.all([
     getMemoryProvider().check(),
     checkTatumSui(),
+    agentCheck(),
   ]);
-  const integrations = [memory, tatum, agentCheck()].map((integration) => ({
+  const integrations = [memory, tatum, agent].map((integration) => ({
     ...integration,
     message: removeEmDashes(integration.message),
     details: integration.details

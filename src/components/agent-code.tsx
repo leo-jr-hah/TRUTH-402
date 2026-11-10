@@ -4,21 +4,21 @@ import { Check, Copy } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-const BASE = "http://localhost:3000";
+const BASE = "https://truth402.vercel.app";
 
 const snippets = [
   {
     title: "Run the sample agent",
-    code: "npm run agent:x402 -- --market mkt-sports-final",
+    code: "npm run agent:x402 -- --market live-752fa61c93f1",
   },
   {
     title: "Or do it with curl",
     code: `# 1. Ask. The server answers 402 with an invoice.
-curl -i ${BASE}/api/oracle/markets/mkt-sports-final/signal
+curl -i ${BASE}/api/oracle/markets/live-752fa61c93f1/signal
 
-# 2. Pay, then ask again with proof (demo digest shown).
-curl ${BASE}/api/oracle/markets/mkt-sports-final/signal \\
-  -H 'Authorization: Payment method="sui", digest="demo-sui-tx-1", invoice="<invoiceToken>", id="<id>"'`,
+# 2. Pay 0.01 USDC on Sui, then ask again with the transaction digest.
+curl ${BASE}/api/oracle/markets/live-752fa61c93f1/signal \\
+  -H 'Authorization: Payment method="sui", digest="<suiTxDigest>", invoice="<invoiceToken>", id="<id>"'`,
   },
 ];
 
