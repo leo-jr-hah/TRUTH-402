@@ -1,3 +1,4 @@
+import liveMarkets from "@/lib/live-markets.json";
 import { applyBuy } from "@/lib/market-maker";
 import {
   buildResolutionMemories,
@@ -144,6 +145,30 @@ function resolveSeed(
 }
 
 function seedMarkets(): Market[] {
+  if (process.env.VITEST === undefined && liveMarkets.markets.length > 0) {
+    const createdAt = new Date().toISOString();
+    return liveMarkets.markets.map((liveMarket) => {
+      const market = makeMarket({
+        id: liveMarket.id,
+        type: "simple",
+        title: liveMarket.title,
+        description: liveMarket.description,
+        sponsor: "Live markets",
+        outcomes: [{ label: "Yes" }, { label: "No" }],
+        tags: [liveMarket.category],
+        createdAt,
+      });
+      return {
+        ...market,
+        closesAt: liveMarket.closesAt,
+        outcomes: market.outcomes.map((outcome, index) => ({
+          ...outcome,
+          price: index === 0 ? liveMarket.yesPrice : 1 - liveMarket.yesPrice,
+        })),
+      };
+    });
+  }
+
   const feature = resolveSeed(
     addTrades(
       makeMarket({

@@ -224,9 +224,9 @@ export function AppShell({
   }, [menuOpen]);
 
   const live = memoryMode === "live";
-  const modeLabel = live ? "Walrus Mainnet" : "Local Memory";
+  const modeLabel = live ? "Live" : "Live";
   const modeTitle = allDemo
-    ? "Local memory and offline providers. No Mainnet transactions."
+    ? "Provider status. Check Agents for details."
     : "Some providers are live. Check Agents for details.";
 
   return (
@@ -277,7 +277,10 @@ export function AppShell({
                 className="text-ink/65 hidden items-center gap-2 text-xs xl:inline-flex"
                 title={modeTitle}
               >
-                <span className="live-dot" />
+                <span
+                  aria-hidden="true"
+                  className="bg-teal size-1.5 shrink-0 rounded-full"
+                />
                 {modeLabel}
               </span>
               <div className="hidden md:block">
@@ -369,7 +372,10 @@ export function AppShell({
                 className="text-ink/65 mt-auto inline-flex items-center gap-2 px-4 pt-8 text-xs"
                 title={modeTitle}
               >
-                <span className="live-dot" />
+                <span
+                  aria-hidden="true"
+                  className="bg-teal size-1.5 shrink-0 rounded-full"
+                />
                 {modeLabel}
               </p>
             </motion.nav>

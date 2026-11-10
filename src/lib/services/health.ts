@@ -15,8 +15,7 @@ function agentCheck(): IntegrationCheck {
         name: "Agent Router",
         mode: "demo",
         status: "unconfigured",
-        message:
-          "Deterministic local insights are active; no model is being called.",
+        message: "Built-in insights are active; no model is being called.",
       };
     }
     return {

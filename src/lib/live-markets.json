@@ -1,0 +1,113 @@
+{
+  "fetchedAt": "2026-11-10T07:31:36.278Z",
+  "markets": [
+    {
+      "id": "live-752fa61c93f1",
+      "title": "Will Bitcoin dip to $55,000 by December 31, 2026?",
+      "description": "This market will immediately resolve to \"Yes\" if any Binance 1 minute candle for Bitcoin (BTC/USDT) between November 24, 2025, 14:00 and December 31, 2026, 23:59 in the ET timezone has a final \"Low\" price equal to or lower than the price specified in the title. Otherwise, this market will resolve to \"No.\"\n\nThe resolution source for this market is Binance, specifically the BTC/USDT \"Low\" prices ava",
+      "category": "crypto",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.095,
+      "volumeUsd": 7654086
+    },
+    {
+      "id": "live-3de0f3d7d7ef",
+      "title": "US strike on Cuba by December 31?",
+      "description": "This market will resolve to \"Yes\" if a US-initiated drone, missile, or air strike on the soil of Cuba is announced or credibly reported to have occurred by the listed date ET. Otherwise, this market will resolve to \"No\".\n\nFor the purposes of this market, a qualifying \"strike\" is defined as the use of aerial bombs, drones, or missiles (including FPV and ATGM strikes as well as cruise or ballistic m",
+      "category": "politics",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.075,
+      "volumeUsd": 5523214
+    },
+    {
+      "id": "live-daa4866bae18",
+      "title": "Will Bitcoin reach $100,000 by December 31, 2026?",
+      "description": "This market will immediately resolve to \"Yes\" if any Binance 1 minute candle for Bitcoin (BTC/USDT) between November 24, 2025, 14:00 and December 31, 2026, 23:59 in the ET timezone has a final \"High\" price equal to or greater than the price specified in the title. Otherwise, this market will resolve to \"No.\"\n\nThe resolution source for this market is Binance, specifically the BTC/USDT \"High\" prices",
+      "category": "crypto",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.075,
+      "volumeUsd": 4179599
+    },
+    {
+      "id": "live-cf25ccc8360f",
+      "title": "Will Ethereum dip to $1,500 by December 31, 2026?",
+      "description": "This market will immediately resolve to “Yes” if any Binance 1-minute candle for Ethereum (ETH/USDT) between November 24, 2025, 14:00 and December 31, 2026, 23:59 in the ET timezone has a final “Low” price equal to or lower than the price specified in the title. Otherwise, this market will resolve to “No.”\n\nThe resolution source for this market is Binance, specifically the ETH/USDT “Low” prices av",
+      "category": "crypto",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.1245,
+      "volumeUsd": 3400741
+    },
+    {
+      "id": "live-4167e22670f3",
+      "title": "Ukraine signs peace deal with Russia by December 31, 2026?",
+      "description": "This market will resolve to “Yes”  if, Ukraine signs any written instrument (e.g., treaty, ceasefire/armistice, framework/“roadmap,” exchange of letters, or mediated agreement text) that: (i) includes both Ukraine and the Russian Federation as parties, and (ii) either ends hostilities/establishes a ceasefire or commits both sides to a defined process toward ending the war (i.e., stated objective o",
+      "category": "politics",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.075,
+      "volumeUsd": 2967064
+    },
+    {
+      "id": "live-857398c4502b",
+      "title": "AI bubble burst in 2026?",
+      "description": "This market will resolve to \"Yes\" if the AI industry experiences an industry downturn by the specified date, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nFor the purposes of this market, the AI industry will be considered to have experienced an industry downturn once at least three of the following events have occurred within 90 days of this market's specified timeframe:\n- NVIDIA Cor",
+      "category": "world",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.0715,
+      "volumeUsd": 2777613
+    },
+    {
+      "id": "live-3d2fc07e08c4",
+      "title": "Will Perplexity AI be acquired before 2027?",
+      "description": "This market will resolve to “Yes” if credible reporting confirms that any entity enters into an agreement to acquire the listed company by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.\n\nMergers where the listed company is subsumed by another entity will count toward a \"Yes\" resolution.\n\nAn announced agreement between the listed company and an acquiring entity will qu",
+      "category": "world",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.06,
+      "volumeUsd": 2415992
+    },
+    {
+      "id": "live-684e5b72d4e4",
+      "title": "Will NVIDIA be the largest company in the world by market cap on December 31?",
+      "description": "This market will resolve to the largest company in the world by market cap on December 31, 2026, as of market close.\n\nThe resolution source for this market will be a consensus of credible reporting.",
+      "category": "macro",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.305,
+      "volumeUsd": 1789862
+    },
+    {
+      "id": "live-06b066958f04",
+      "title": "Will Viking Therapeutics be acquired before 2027?",
+      "description": "This market will resolve to “Yes” if credible reporting confirms that any entity enters into an agreement to acquire the listed company by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.\n\nMergers where the listed company is subsumed by another entity will count toward a \"Yes\" resolution.\n\nAn announced agreement between the listed company and an acquiring entity will qu",
+      "category": "world",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.105,
+      "volumeUsd": 1717822
+    },
+    {
+      "id": "live-4437c8690e2e",
+      "title": "Will Israel strike 4 countries in 2026?",
+      "description": "This market will resolve according to the total number of different countries' soil that Israel initiates a drone, missile, or air strike between January 1, 2026, 12:00 AM ET and December 31, 2026, 11:59 PM ET.\n\nStrikes on embassies or consulates will count towards the country the embassy or consulate is located in, not towards the country they represent.\n\nStrikes within the territory controlled b",
+      "category": "politics",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.8225,
+      "volumeUsd": 1537175
+    },
+    {
+      "id": "live-55a5a4b50b79",
+      "title": "Will Apple be the largest company in the world by market cap on December 31?",
+      "description": "This market will resolve to the largest company in the world by market cap on December 31, 2026, as of market close.\n\nThe resolution source for this market will be a consensus of credible reporting.",
+      "category": "macro",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.6695,
+      "volumeUsd": 1476035
+    },
+    {
+      "id": "live-bfc776a7f419",
+      "title": "Will a team from LCK (South Korea) win LoL Worlds 2026?",
+      "description": "This market will resolve according to the region or country of the esports team winning 1st place in the League of Legends 2026 Season World Championship (Worlds 2026).\n\nIf the winner of Worlds 2026 is not determined by December 31, 2026 ET, this market will resolve to \"Other\".\n\nThe resolution source for this market will be official information from Fandom (https://lol.fandom.com/wiki/2026_Season_",
+      "category": "sports",
+      "closesAt": "2027-01-01T00:00:00.000Z",
+      "yesPrice": 0.625,
+      "volumeUsd": 756591
+    }
+  ]
+}
