@@ -116,7 +116,7 @@ export async function buildWalletPayment(
   if (balance < BigInt(10000))
     throw new AppError(
       "INSUFFICIENT_USDC",
-      "This wallet needs 0.01 native USDC and SUI for gas.",
+      `Your connected wallet ${sender.slice(0, 8)}...${sender.slice(-6)} holds ${(Number(balance) / 1e6).toFixed(2)} USDC on Sui Mainnet. Add at least 0.01 USDC and a little SUI for gas, then try again.`,
       422,
     );
   const bytes = await invoicePaymentTransaction(invoice, sender, coins).build({

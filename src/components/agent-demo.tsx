@@ -504,7 +504,9 @@ export function AgentDemo({
           </p>
           {invoice && (
             <div className="border-line space-y-2 rounded-xl border p-3 text-xs">
-              <p className="break-all">Recipient: {invoice.recipient}</p>
+              <p className="break-all">
+                Paid from your connected wallet to {invoice.recipient}
+              </p>
               <p className="break-all">Native USDC: {invoice.coinType}</p>
               <p className="break-all">
                 Public PTB reference: {invoice.paymentReference}
