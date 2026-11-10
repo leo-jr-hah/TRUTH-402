@@ -43,6 +43,12 @@ export interface SuiStandardWallet {
         }) => void,
       ): () => void;
     };
+    "sui:signPersonalMessage"?: {
+      signPersonalMessage(input: {
+        message: Uint8Array;
+        account: SuiWalletAccount;
+      }): Promise<{ bytes: string; signature: string }>;
+    };
     "sui:signTransaction"?: {
       signTransaction(input: SignInput): Promise<SignedTransaction>;
     };
@@ -277,6 +283,21 @@ export class SuiWalletStore {
     } catch {
       /* Local state is already disconnected. */
     }
+  }
+  async signMessage(
+    message: Uint8Array,
+  ): Promise<{ bytes: string; signature: string }> {
+    const wallet = this.selected,
+      account = this.account;
+    const feature = wallet?.features["sui:signPersonalMessage"];
+    if (
+      !wallet ||
+      !account ||
+      !feature ||
+      this.state.connected?.kind !== "wallet"
+    )
+      throw new Error("Connect a Sui wallet that can sign messages.");
+    return feature.signPersonalMessage({ message, account });
   }
   async signOrExecute(
     transaction: WalletTransaction,

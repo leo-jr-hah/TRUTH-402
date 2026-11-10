@@ -394,7 +394,8 @@ export function MarketWorkspace({
     ranked[0]?.id ?? market.outcomes[0]?.id ?? "",
   );
   const [amountText, setAmountText] = useState("50");
-  const { connected } = useSuiWallet();
+  const wallet = useSuiWallet();
+  const { connected } = wallet;
   const [customName, setDisplayName] = useState<string | null>(null);
   const displayName =
     customName ??
@@ -446,13 +447,20 @@ export function MarketWorkspace({
         return;
       }
 
+      const issued = new Date().toISOString();
+      const signed = await wallet.store?.signMessage(
+        new TextEncoder().encode(
+          `TRUTH402 trade authorization\nmarket:${market.id}\nwallet:${connected.address}\nissued:${issued}`,
+        ),
+      );
+      if (!signed) throw new Error("Wallet signature required.");
       const response = await fetch(`/api/markets/${market.id}/trade`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          ...(operatorToken
-            ? { authorization: `Bearer ${operatorToken}` }
-            : {}),
+          "x-wallet-address": connected.address,
+          "x-wallet-issued": issued,
+          "x-wallet-signature": signed.signature,
         },
         body: JSON.stringify({
           outcomeId: selectedOutcome,
@@ -586,7 +594,7 @@ export function MarketWorkspace({
     displayName,
     onName: setDisplayName,
     commitMode,
-    operatorRequired,
+    operatorRequired: false,
     operatorToken,
     onToken: setOperatorToken,
     pending: tradePending,
